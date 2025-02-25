@@ -10,6 +10,11 @@ dotenv.config();
 
 const app = express();
 
+// Move CORS middleware to the top, before any routes
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Store the current daily letters
 let currentDailyLetters = generateDailyString();
 
@@ -41,10 +46,6 @@ app.get('/api/daily-letters', (req, res) => {
     centerLetter: currentDailyLetters[Math.floor(Math.random() * 7)] // Randomly select center letter
   });
 });
-
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 connectDB();
 
