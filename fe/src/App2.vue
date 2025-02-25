@@ -102,7 +102,7 @@
 
               <div class="progress-dots">
                 <span 
-                  v-for="(letter, index) in ['B', 'N', 'A', 'V', 'I', 'C']" 
+                  v-for="(letter, index) in ['B', 'N', 'A', 'V', 'S', 'F', 'E', 'G']" 
                   :key="letter"
                   class="dot w-[20px] h-[20px]"
                   :style="{ backgroundColor: getRankBackground(letter, index) }"
@@ -375,20 +375,33 @@
           </div>
 
           <div class="hexagon-section">
-            <div class="hexagon-grid">
+            <div v-if="!isLoading" class="hexagon-grid">
               <div class="hexagon-row">
-                <div class="circle" @click="addLetter('E')">E</div>
-                <div class="circle" @click="addLetter('F')">F</div>
-                <div class="circle" @click="addLetter('G')">G</div>
+                <div 
+                  v-for="(letter, index) in [letters[0], centerLetter, letters[2]]" 
+                  :key="index"
+                  :class="{ 'center-letter': letter === centerLetter }"
+                  class="circle" 
+                  @click="addLetter(letter)"
+                >
+                  {{ letter }}
+                </div>
               </div>
               <div class="hexagon-row">
-                <div class="circle green" @click="addLetter('A')">A</div>
-                <div class="circle" @click="addLetter('B')">B</div>
-                <div class="circle" @click="addLetter('C')">C</div>
-                <div class="circle" @click="addLetter('D')">D</div>
+                <div 
+                  v-for="(letter, index) in letters.slice(3)" 
+                  :key="index + 3"
+                  class="circle" 
+                  @click="addLetter(letter)"
+                >
+                  {{ letter }}
+                </div>
               </div>
             </div>
-
+            <div v-else class="loading-spinner">
+              Loading...
+            </div>
+            
             <div class="controls">
               <div class="flex justify-end gap-2">
                 <a class="text-[14px] underline cursor-pointer" 
@@ -617,25 +630,25 @@ const validationMessage = ref('')
 const totalPoints = ref(0)  // Initialize points to 0
 const currentLevel = ref('B') // Starting level
 const levelThresholds = {
-  B: 0,   // Beginner
-  N: 6,  // Novice 
-  A: 9,  // Advanced
-  V: 11,  // Very Good
-  I: 13,  // Impressive
-  C: 15  // Champion
+  B: 0,    // Beginner
+  N: 11,   // Novice 
+  A: 23,   // Advanced
+  V: 34,   // Very Good
+  S: 46,   // Superb
+  F: 93,   // Fabulous
+  E: 128,  // Exceptional
+  G: 163   // Genius
 }
 
 // Add these new refs for user data
 const username = ref(Cookies.get('username') || '') // Get username from cookie
 const userPoints = ref(0)
 const userWords = ref([])
-const isLoading = ref(false)
+const isLoading = ref(true) // This is the only isLoading declaration we'll keep
 
 // Add these new refs
-const userProfile = ref(null)
-const showProfileMenu = ref(false)
-const profileBtn = ref(null)
-const profileMenu = ref(null)
+const letters = ref(['H', 'D', 'Z', 'N', 'X', 'V', 'W'])
+const centerLetter = ref('X')
 
 // Inside the setup function, get router instance
 const router = useRouter()
@@ -850,17 +863,41 @@ const updatePointsAndLevel = () => {
 
 // Function to save game state to cookies
 const saveGameState = () => {
- 
+  try {
+    const gameState = {
+      username: username.value,
+      points: totalPoints.value,
+      words: foundWords.value,
+      level: currentLevel.value
+    }
+    localStorage.setItem('spellsbeeGameState', JSON.stringify(gameState))
+  } catch (error) {
+    console.error('Error saving game state:', error)
+  }
 }
 
 // Function to load game state from cookies
 const loadGameState = () => {
-  
+  try {
+    const savedState = localStorage.getItem('spellsbeeGameState')
+    if (savedState) {
+      const state = JSON.parse(savedState)
+      username.value = state.username || ''
+      totalPoints.value = state.points || 0
+      foundWords.value = state.words || []
+      currentLevel.value = state.level || 'B'
+    }
+  } catch (error) {
+    console.error('Error loading game state:', error)
+  }
 }
 
 // Add this function to fetch user data
 const fetchUserData = async () => {
-  if (!username.value) return
+  if (!username.value) {
+    console.log('No username available, skipping fetch')
+    return
+  }
   
   isLoading.value = true
   try {
@@ -871,20 +908,42 @@ const fetchUserData = async () => {
       userWords.value = response.data.words || []
       foundWords.value = userWords.value // Update foundWords with fetched words
       
-      // Update total points
+      // Update total points and level
       totalPoints.value = userPoints.value
-      
-      // Update level based on points
       updatePointsAndLevel()
+
+      // Save to local storage
+      saveGameState()
     }
   } catch (error) {
     console.error('Error fetching user data:', error)
+    // Reset to default values on error
+    userPoints.value = 0
+    userWords.value = []
+    foundWords.value = []
+    totalPoints.value = 0
   } finally {
     isLoading.value = false
   }
 }
 
-// Modify the submitWord function to save words to the API
+// Add this function to fetch daily letters
+const fetchDailyLetters = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/daily-letters`)
+    letters.value = response.data.letters.split('')
+    centerLetter.value = response.data.centerLetter
+    isLoading.value = false
+  } catch (error) {
+    console.error('Error fetching daily letters:', error)
+    // Fallback to default letters if API fails
+    letters.value = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+    centerLetter.value = 'A'
+    isLoading.value = false
+  }
+}
+
+// Update submitWord function to use dynamic center letter
 const submitWord = async () => {
   if (!username.value) {
     validationMessage.value = 'Please set a username first'
@@ -896,6 +955,16 @@ const submitWord = async () => {
   }
 
   try {
+    // Update validation to use dynamic center letter
+    if (!currentWord.value.includes(centerLetter.value)) {
+      validationMessage.value = 'Word must include the center letter'
+      showValidationPopup.value = true
+      setTimeout(() => {
+        showValidationPopup.value = false
+      }, 1500)
+      return
+    }
+    
     // First validate the word
     if (!currentWord.value.includes('A')) {
       validationMessage.value = 'Word must include the green letter'
@@ -971,30 +1040,15 @@ const submitWord = async () => {
   currentWord.value = ''
 }
 
-// Add this function to reset game
-const resetGame = async () => {
-  if (!username.value) return
+// Add to onMounted
+onMounted(async () => {
+  loadUserProfile() // Load user profile first
+  loadGameState() // Load saved game state
+  await fetchDailyLetters() // Wait for letters to load
+  await fetchUserData() // Then fetch user data
   
-  try {
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/spellsbee/user/${username.value}/reset`)
-    
-    if (response.data.success) {
-      foundWords.value = []
-      totalPoints.value = 0
-      currentLevel.value = 'B'
-      updatePointsAndLevel()
-    }
-  } catch (error) {
-    console.error('Error resetting game:', error)
-  }
-}
-
-// Fetch user data when component mounts
-onMounted(() => {
-  fetchUserData()
-  loadGameState()
+  // Add event listeners
   window.addEventListener('keydown', handleKeyPress)
-  loadUserProfile()
   document.addEventListener('click', handleClickOutside)
 })
 
@@ -1004,26 +1058,22 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 
-// Add this function to handle keyboard input
+// Update handleKeyPress to use dynamic letters
 const handleKeyPress = (event) => {
-  // Convert key to uppercase for consistency
   const key = event.key.toUpperCase()
   
-  // Handle backspace/delete
   if (event.key === 'Backspace' || event.key === 'Delete') {
     deleteLastLetter()
     return
   }
 
-  // Handle enter key for submit
   if (event.key === 'Enter') {
     submitWord()
     return
   }
 
   // Check if the pressed key matches any of the valid letters
-  const validLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-  if (validLetters.includes(key)) {
+  if (letters.value.includes(key)) {
     addLetter(key)
   }
 }
@@ -1042,7 +1092,7 @@ watch(username, (newUsername) => {
 
 // Add this function to determine background color
 const getRankBackground = (letter, index) => {
-  const ranks = ['B', 'N', 'A', 'V', 'I', 'C']
+  const ranks = ['B', 'N', 'A', 'V', 'S', 'F', 'E', 'G']
   const currentRankIndex = ranks.indexOf(currentLevel.value)
   
   if (index <= currentRankIndex) {
@@ -1058,11 +1108,13 @@ const getRankBackground = (letter, index) => {
 const getRankTooltip = (letter) => {
   const rankInfo = {
     'B': 'Beginner (0 points)',
-    'N': 'Novice (20 points)',
-    'A': 'Advanced (35 points)',
-    'V': 'Very Good (50 points)',
-    'I': 'Impressive (75 points)',
-    'C': 'Champion (100 points)'
+    'N': 'Novice (11 points)',
+    'A': 'Advanced (23 points)',
+    'V': 'Very Good (34 points)',
+    'S': 'Superb (46 points)',
+    'F': 'Fabulous (93 points)',
+    'E': 'Exceptional (128 points)',
+    'G': 'Genius (163 points)'
   }
   return rankInfo[letter]
 }
@@ -1080,10 +1132,18 @@ const closePopup = () => {
 
 // Add these new functions
 const loadUserProfile = () => {
-  const userData = localStorage.getItem('spellsbeeUser');
-  debugger;
-  if (userData) {
-    userProfile.value = JSON.parse(userData)
+  try {
+    const userData = localStorage.getItem('spellsbeeUser')
+    if (userData) {
+      userProfile.value = JSON.parse(userData)
+      // Also update username if available
+      if (userProfile.value?.username) {
+        username.value = userProfile.value.username
+      }
+    }
+  } catch (error) {
+    console.error('Error loading user profile:', error)
+    userProfile.value = null
   }
 }
 
@@ -1119,6 +1179,12 @@ const handleSignupSuccess = () => {
   activePopup.value = null
   router.push('/')
 }
+
+// Add these refs for user profile and menu state
+const userProfile = ref(null)
+const showProfileMenu = ref(false)
+const profileBtn = ref(null)
+const profileMenu = ref(null)
 </script>
 
 <style scoped>
@@ -1261,7 +1327,7 @@ const handleSignupSuccess = () => {
 }
 
 .dot {
-  
+  cursor: pointer;
   border-radius: 50%;
   background: #e6e6e6;
   display: flex;
@@ -3110,6 +3176,26 @@ ul {
     background: #333;
     color: #fff;
   }
+}
+
+/* Add loading spinner styles */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #666;
+}
+
+/* Update circle styles */
+.circle.green {
+  background: #28a745;
+  color: white;
+}
+
+.circle.center-letter {
+  background: #28a745;
+  color: white;
 }
 </style>
 

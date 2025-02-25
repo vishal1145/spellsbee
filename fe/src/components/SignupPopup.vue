@@ -6,7 +6,14 @@
         <form @submit.prevent="handleSignup">
           <div class="form-group">
             <label>Username</label>
-            <input type="text" v-model="username" required>
+            <input 
+              type="text" 
+              v-model="username" 
+              required
+              minlength="4"
+              maxlength="25"
+              @input="validateUsername">
+            <span v-if="usernameError" class="error-message">{{ usernameError }}</span>
           </div>
           <div class="form-group">
             <label>Email</label>
@@ -15,11 +22,18 @@
           <div class="form-group">
             <label>Password</label>
             <div class="password-input-container">
-              <input :type="showPassword ? 'text' : 'password'" v-model="password" required>
+              <input 
+                :type="showPassword ? 'text' : 'password'" 
+                v-model="password" 
+                required
+                minlength="4"
+                maxlength="25"
+                @input="validatePassword">
               <button type="button" class="toggle-password" @click="togglePassword">
                 <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
               </button>
             </div>
+            <span v-if="passwordError" class="error-message">{{ passwordError }}</span>
           </div>
           <div class="form-actions">
             <div class="links">
@@ -54,12 +68,42 @@ const email = ref('')
 const password = ref('')
 const signupSuccess = ref(false)
 const showPassword = ref(false)
+const usernameError = ref('')
+const passwordError = ref('')
 
 const close = () => {
   emit('close')
 }
 
+const validateUsername = () => {
+  if (username.value.length < 4) {
+    usernameError.value = 'Username must be at least 4 characters'
+  } else if (username.value.length > 25) {
+    usernameError.value = 'Username must not exceed 25 characters'
+  } else {
+    usernameError.value = ''
+  }
+}
+
+const validatePassword = () => {
+  if (password.value.length < 4) {
+    passwordError.value = 'Password must be at least 4 characters long'
+  } else if (password.value.length > 25) {
+    passwordError.value = 'Password must not exceed 25 characters'
+  } else {
+    passwordError.value = ''
+  }
+}
+
 const handleSignup = async () => {
+  // Validate before submitting
+  validateUsername()
+  validatePassword()
+  
+  if (usernameError.value || passwordError.value) {
+    return
+  }
+  
   try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/register`, {
       method: 'PUT',
@@ -244,5 +288,12 @@ input:focus {
 
 .toggle-password:hover {
   color: #4CAF50;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
 }
 </style> 

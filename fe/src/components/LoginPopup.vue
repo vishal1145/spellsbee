@@ -8,12 +8,24 @@
       <form @submit.prevent="handleLogin">
         <div class="form-group">
           <label>Email</label>
-          <input type="email" v-model="email" required>
+          <input 
+            type="email" 
+            v-model="email" 
+            required
+            minlength="4"
+            maxlength="25"
+          >
         </div>
         <div class="form-group">
           <label>Password</label>
           <div class="password-input-wrapper">
-            <input :type="showPassword ? 'text' : 'password'" v-model="password" required>
+            <input 
+              :type="showPassword ? 'text' : 'password'" 
+              v-model="password" 
+              required
+              minlength="4"
+              maxlength="25"
+            >
             <button type="button" class="toggle-password" @click="togglePassword">
               <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
             </button>
@@ -52,6 +64,18 @@ const close = () => {
 const handleLogin = async () => {
   try { 
     errorMessage.value = ''; // Clear any previous error
+
+    // Add validation check
+    if (email.value.length < 4 || email.value.length > 25) {
+      errorMessage.value = 'Email must be between 4 and 25 characters.';
+      return;
+    }
+
+    if (password.value.length < 4 || password.value.length > 25) {
+      errorMessage.value = 'Password must be between 4 and 25 characters.';
+      return;
+    }
+
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/login`, {
       method: 'PUT',
       headers: {
@@ -66,10 +90,10 @@ const handleLogin = async () => {
     const data = await response.json();
     
     if (response.ok) {
-    
       localStorage.setItem('spellsbeeUser', JSON.stringify(data));
       emit('loginSuccess', data);
       close();
+      window.location.reload();
     } else {
       if (data.isEmailVerified === false) {
         errorMessage.value = 'Please verify your email account before login.';

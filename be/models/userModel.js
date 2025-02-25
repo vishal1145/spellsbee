@@ -7,7 +7,9 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   emailVerified: { type: Boolean, default: false },
   verificationToken: { type: String },  
-  verificationTokenExpires: { type: Date } 
+  verificationTokenExpires: { type: Date },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
 }, { timestamps: true });
 
 userSchema.methods.comparePassword = async function (candidatePassword) {

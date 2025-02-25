@@ -22,24 +22,14 @@ const routes = [
     component: () => import('./views/DisclaimerPage.vue')
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import('./views/Login.vue')
-  },
-  {
-    path: '/signup',
-    name: 'Signup',
-    component: () => import('./views/Signup.vue')
-  },
-  {
-    path: '/forgot-password',
-    name: 'ForgotPassword',
-    component: () => import('./views/ForgotPassword.vue')
-  },
-  {
     path: '/verify-email',
     name: 'VerifyEmail',
     component: () => import('./views/VerifyEmail.vue')
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: () => import('./views/ResetPassword.vue')
   }
 ]  
 

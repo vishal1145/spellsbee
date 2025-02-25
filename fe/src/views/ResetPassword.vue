@@ -1,29 +1,41 @@
 <template>
-  <div class="popup-overlay" v-if="isVisible" @click.self="close">
-    <div class="popup-content">
-      <h2>Reset Password</h2>
+  <div class="reset-password-container">
+    <div class="reset-form">
+      <h2>Set New Password</h2>
       <div v-if="statusMessage" :class="['status-message', statusType]">
         {{ statusMessage }}
       </div>
-      <form @submit.prevent="handleForgotPassword" v-if="!isSuccess">
+      <form @submit.prevent="handleResetPassword" v-if="!isSuccess">
         <div class="form-group">
-          <label>Email</label>
-          <input type="email" v-model="email" required :disabled="isLoading">
+          <label>New Password</label>
+          <input 
+            type="password" 
+            v-model="password" 
+            required 
+            :disabled="isLoading"
+            placeholder="Enter new password"
+          >
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input 
+            type="password" 
+            v-model="confirmPassword" 
+            required 
+            :disabled="isLoading"
+            placeholder="Confirm new password"
+          >
         </div>
         <div class="form-actions">
-          <div class="links">
-            <a href="#" @click.prevent="$emit('showLogin')">Back to Login</a>
-          </div>
-          <button type="submit" class="forgot-password-button" :disabled="isLoading">
-            {{ isLoading ? 'Sending...' : 'Send Reset Link →' }}
+          <button type="submit" class="reset-button" :disabled="isLoading">
+            {{ isLoading ? 'Resetting...' : 'Reset Password →' }}
           </button>
         </div>
       </form>
       <div v-else class="success-content">
-        <p>Please check your email to reset your password.</p>
-        <p class="email-sent">We've sent instructions to:<br><strong>{{ email }}</strong></p>
-        <button class="forgot-password-button" @click="close">
-          Close
+        <p>Your password has been successfully reset!</p>
+        <button class="reset-button" @click="redirectToLogin">
+          Go to Login
         </button>
       </div>
     </div>
@@ -32,66 +44,82 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-const props = defineProps({
-  isVisible: Boolean
-})
-
-const emit = defineEmits(['close', 'showLogin'])
-
-const email = ref('')
+const router = useRouter()
+const password = ref('')
+const confirmPassword = ref('')
 const statusMessage = ref('')
 const statusType = ref('')
 const isLoading = ref(false)
 const isSuccess = ref(false)
 
-const close = () => {
-  emit('close')
-}
-
-const handleForgotPassword = async () => {
-  isLoading.value = true
+const handleResetPassword = async () => {
+  // Clear previous status
   statusMessage.value = ''
   
+  // Get token from URL query parameters
+  const token = new URLSearchParams(window.location.search).get('token')
+  
+  // Validate token
+  if (!token) {
+    statusMessage.value = 'Invalid or missing reset token. Please check your reset password link.'
+    statusType.value = 'error'
+    return
+  }
+
+  // Validate passwords
+  if (password.value !== confirmPassword.value) {
+    statusMessage.value = 'Passwords do not match'
+    statusType.value = 'error'
+    return
+  }
+
+  isLoading.value = true
+  
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/forgot-password`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/reset-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: email.value }),
-    });
+      body: JSON.stringify({ 
+        token,
+        password: password.value 
+      }),
+    })
 
     if (!response.ok) {
-      throw new Error('Password reset request failed');
+      const data = await response.json()
+      throw new Error(data.message || 'Password reset failed')
     }
 
-    isSuccess.value = true;
+    isSuccess.value = true
     statusType.value = 'success'
   } catch (error) {
-      statusMessage.value = 'Email not found please register first'
-    console.error('Error:', error);
+    statusMessage.value = error.message || 'Failed to reset password. Please try again.'
     statusType.value = 'error'
+    console.error('Error:', error)
   } finally {
     isLoading.value = false
   }
 }
+
+const redirectToLogin = () => {
+  router.push('/')
+}
 </script>
 
 <style scoped>
-.popup-overlay {
-  background: rgba(0, 0, 0, 0.6);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+.reset-password-container {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #f9fafb;
 }
 
-.popup-content {
+.reset-form {
   background: white;
   padding: 2.5rem;
   border-radius: 12px;
@@ -139,25 +167,7 @@ input:focus {
   margin-top: 2rem;
 }
 
-.links {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1.25rem;
-}
-
-.links a {
-  color: #4CAF50;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.links a:hover {
-  color: #388E3C;
-}
-
-.forgot-password-button {
+.reset-button {
   width: 100%;
   padding: 0.875rem;
   background-color: #4CAF50;
@@ -170,12 +180,12 @@ input:focus {
   transition: all 0.2s;
 }
 
-.forgot-password-button:hover {
+.reset-button:hover {
   background-color: #388E3C;
   transform: translateY(-1px);
 }
 
-.forgot-password-button:active {
+.reset-button:active {
   transform: translateY(0);
 }
 
@@ -208,17 +218,6 @@ input:focus {
   color: #4a5568;
   font-size: 14px;
   line-height: 1.5;
-}
-
-.email-sent {
-  background-color: #f3f4f6;
-  padding: 1rem;
-  border-radius: 6px;
-  margin: 1.5rem 0;
-}
-
-.email-sent strong {
-  color: #1f2937;
 }
 
 button:disabled {

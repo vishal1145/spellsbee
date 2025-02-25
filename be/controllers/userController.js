@@ -165,11 +165,78 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: 'Please provide email' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'Email not found' });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenExpires = new Date(Date.now() + 60 * 60 * 1000);  
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = resetTokenExpires;
+    await user.save();
+
+    const resetLink = `${process.env.BASE_URL}/reset-password?token=${resetToken}`;
+    await sendEmail(
+      email,
+      'Password Reset Request',
+      `Click here to reset your password: ${resetLink}\nThis link will expire in 1 hour.`
+    );
+
+    res.status(200).json({ message: 'Password reset link sent to email' });
+
+  } catch (error) {
+    console.error('Error in forgot password:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({ message: 'Please provide token and new password' });
+    }
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired reset token' });
+    }
+
+    user.password = await bcrypt.hash(password, 10);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();    
+
+    res.status(200).json({ message: 'Password reset successful' });
+
+  } catch (error) {
+    console.error('Error in reset password:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 module.exports = {
   getUsers,
   getUserById,
   createUser,
   registerUser,
   loginUser,
-  verifyEmail
+  verifyEmail,
+  forgotPassword,
+  resetPassword
 }; 
