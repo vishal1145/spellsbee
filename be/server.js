@@ -41,9 +41,12 @@ cron.schedule('0 0 * * *', () => {
 
 // Add new endpoint to get daily letters
 app.get('/api/daily-letters', (req, res) => {
+  // res.json({ 
+  //   letters: currentDailyLetters,
+  //   centerLetter: currentDailyLetters[Math.floor(Math.random() * 7)] // Randomly select center letter
+  // });
   res.json({ 
     letters: currentDailyLetters,
-    centerLetter: currentDailyLetters[Math.floor(Math.random() * 7)] // Randomly select center letter
   });
 });
 

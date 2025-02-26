@@ -1,8 +1,6 @@
 <template>
   <div>
     <div class="game-container">
-     
-      <!-- Add the popup components -->
       <LoginPopup 
         :is-visible="activePopup === 'login'"
         @close="closePopup"
@@ -20,7 +18,6 @@
         @show-login="activePopup = 'login'"
       />
 
-      <!-- Top navigation bar -->
       <div class="nav-bar">
         <div class="left-section">
           <div class="help-section">
@@ -107,6 +104,7 @@
                   class="dot w-[20px] h-[20px]"
                   :style="{ backgroundColor: getRankBackground(letter, index) }"
                   :title="getRankTooltip(letter)"
+                  @click="showRankPopup(letter)"
                 >
                   {{ letter }}
                 </span>
@@ -564,6 +562,22 @@
           </div>
         </div>
       </div>
+
+      <!-- Add new rank popup -->
+      <div v-if="showRankDetails" class="popup-overlay" @click="closeRankPopup">
+        <div class="popup-content rank-popup" @click.stop>
+          <div class="flex justify-between items-center mb-[10px] text-[14px] font-[600]">
+            <div>{{ selectedRank.title }}</div>
+            <button class="close-btn" @click="closeRankPopup">×</button>
+          </div>
+          <div class="popup-body">
+            <div class="rank-details">
+              <div class="points">Points needed: {{ selectedRank.points }}</div>
+              <div class="description">{{ selectedRank.description }}</div> 
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <Section title="Spelling Bee Game" />
@@ -932,7 +946,7 @@ const fetchDailyLetters = async () => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/daily-letters`)
     letters.value = response.data.letters.split('')
-    centerLetter.value = response.data.centerLetter
+    centerLetter.value = response.data.letters.split('')[1]
     isLoading.value = false
   } catch (error) {
     console.error('Error fetching daily letters:', error)
@@ -1153,7 +1167,8 @@ const toggleProfileMenu = () => {
 
 // Then update the navigation methods to use router
 const logout = () => {
-  localStorage.removeItem('spellsbeeUser')
+  localStorage.removeItem('spellsbeeUser');
+  Cookies.remove('username');
   userProfile.value = null
   showProfileMenu.value = false
   // Reload the page instead of using router
@@ -1185,6 +1200,68 @@ const userProfile = ref(null)
 const showProfileMenu = ref(false)
 const profileBtn = ref(null)
 const profileMenu = ref(null)
+
+// Add these new refs
+const showRankDetails = ref(false)
+const selectedRank = ref({
+  title: '',
+  points: 0,
+  description: ''
+})
+
+// Add this new object for rank details
+const rankDetails = {
+  'B': {
+    title: 'Beginner',
+    points: 0,
+    description: 'Starting rank for all players. Keep playing to improve!'
+  },
+  'N': {
+    title: 'Novice',
+    points: 11,
+    description: 'You\'re getting the hang of it! Keep finding more words.'
+  },
+  'A': {
+    title: 'Advanced',
+    points: 23,
+    description: 'You\'re making good progress. Your vocabulary is expanding!'
+  },
+  'V': {
+    title: 'Very Good',
+    points: 34,
+    description: 'Impressive word skills! You\'re becoming a word master.'
+  },
+  'S': {
+    title: 'Superb',
+    points: 46,
+    description: 'Outstanding performance! Your word knowledge is remarkable.'
+  },
+  'F': {
+    title: 'Fabulous',
+    points: 93,
+    description: 'Exceptional word mastery! You\'re among the top players.'
+  },
+  'E': {
+    title: 'Exceptional',
+    points: 128,
+    description: 'Amazing achievement! Your word skills are extraordinary.'
+  },
+  'G': {
+    title: 'Genius',
+    points: 163,
+    description: 'Ultimate mastery! You\'ve reached the highest rank possible.'
+  }
+}
+
+// Add these new functions
+const showRankPopup = (letter) => {
+  selectedRank.value = rankDetails[letter]
+  showRankDetails.value = true
+}
+
+const closeRankPopup = () => {
+  showRankDetails.value = false
+}
 </script>
 
 <style scoped>
@@ -3196,6 +3273,38 @@ ul {
 .circle.center-letter {
   background: #28a745;
   color: white;
+}
+
+/* Add these new styles */
+.rank-popup {
+  max-width: 400px;
+  width: 90%;
+}
+
+ 
+
+.rank-details .points {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.rank-details .description {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .rank-details .points {
+    color: #fff;
+  }
+  
+  .rank-details .description {
+    color: #999;
+  }
 }
 </style>
 

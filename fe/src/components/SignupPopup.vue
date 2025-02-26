@@ -11,13 +11,13 @@
               v-model="username" 
               required
               minlength="4"
-              maxlength="25"
+              maxlength="50"
               @input="validateUsername">
             <span v-if="usernameError" class="error-message">{{ usernameError }}</span>
           </div>
           <div class="form-group">
             <label>Email</label>
-            <input type="email" v-model="email" required>
+            <input type="email" v-model="email" required maxlength="50">
           </div>
           <div class="form-group">
             <label>Password</label>
@@ -78,8 +78,8 @@ const close = () => {
 const validateUsername = () => {
   if (username.value.length < 4) {
     usernameError.value = 'Username must be at least 4 characters'
-  } else if (username.value.length > 25) {
-    usernameError.value = 'Username must not exceed 25 characters'
+  } else if (username.value.length > 50) {
+    usernameError.value = 'Username must not exceed 50 characters'
   } else {
     usernameError.value = ''
   }

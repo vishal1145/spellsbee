@@ -13,7 +13,7 @@
             v-model="email" 
             required
             minlength="4"
-            maxlength="25"
+            maxlength="50"
           >
         </div>
         <div class="form-group">
@@ -66,8 +66,8 @@ const handleLogin = async () => {
     errorMessage.value = ''; // Clear any previous error
 
     // Add validation check
-    if (email.value.length < 4 || email.value.length > 25) {
-      errorMessage.value = 'Email must be between 4 and 25 characters.';
+    if (email.value.length < 4 || email.value.length > 50) {
+      errorMessage.value = 'Email must be between 4 and 50 characters.';
       return;
     }
 
