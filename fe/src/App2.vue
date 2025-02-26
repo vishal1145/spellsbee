@@ -18,6 +18,7 @@
         @show-login="activePopup = 'login'"
       />
 
+      <!-- Top navigation bar -->
       <div class="nav-bar">
         <div class="left-section">
           <div class="help-section">
@@ -946,13 +947,13 @@ const fetchDailyLetters = async () => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/daily-letters`)
     letters.value = response.data.letters.split('')
-    centerLetter.value = response.data.letters.split('')[1]
+    centerLetter.value = response.data.centerLetter
     isLoading.value = false
   } catch (error) {
     console.error('Error fetching daily letters:', error)
     // Fallback to default letters if API fails
     letters.value = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-    centerLetter.value = 'A'
+    centerLetter.value = 'B'
     isLoading.value = false
   }
 }
@@ -969,19 +970,9 @@ const submitWord = async () => {
   }
 
   try {
-    // Update validation to use dynamic center letter
+    // Validate center letter first
     if (!currentWord.value.includes(centerLetter.value)) {
-      validationMessage.value = 'Word must include the center letter'
-      showValidationPopup.value = true
-      setTimeout(() => {
-        showValidationPopup.value = false
-      }, 1500)
-      return
-    }
-    
-    // First validate the word
-    if (!currentWord.value.includes('A')) {
-      validationMessage.value = 'Word must include the green letter'
+      validationMessage.value = `Word must include the center letter "${centerLetter.value}"`
       showValidationPopup.value = true
       setTimeout(() => {
         showValidationPopup.value = false
