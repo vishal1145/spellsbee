@@ -42,6 +42,8 @@ cron.schedule('0 0 * * *', () => {
 
 // Add new endpoint to get daily letters
 app.get('/api/daily-letters', (req, res) => {
+  console.log('Sending daily letters:', currentDailyLetters);
+  console.log('Sending center letter:', currentCenterLetter);
   res.json({ 
     letters: currentDailyLetters,
     centerLetter: currentCenterLetter  
