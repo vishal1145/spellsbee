@@ -12,12 +12,19 @@
               required
               minlength="4"
               maxlength="50"
-              @input="validateUsername">
+              @input="validateUsername"
+              @keyup="removeSpaces('username')">
             <span v-if="usernameError" class="error-message">{{ usernameError }}</span>
           </div>
           <div class="form-group">
             <label>Email</label>
-            <input type="email" v-model="email" required maxlength="50">
+            <input 
+              type="email" 
+              v-model="email" 
+              required 
+              maxlength="50"
+              @keyup="removeSpaces('email')">
+            <span v-if="emailError" class="error-message">{{ emailError }}</span>
           </div>
           <div class="form-group">
             <label>Password</label>
@@ -28,7 +35,8 @@
                 required
                 minlength="4"
                 maxlength="25"
-                @input="validatePassword">
+                @input="validatePassword"
+                @keyup="removeSpaces('password')">
               <button type="button" class="toggle-password" @click="togglePassword">
                 <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
               </button>
@@ -70,6 +78,7 @@ const signupSuccess = ref(false)
 const showPassword = ref(false)
 const usernameError = ref('')
 const passwordError = ref('')
+const emailError = ref('')
 
 const close = () => {
   emit('close')
@@ -92,6 +101,16 @@ const validatePassword = () => {
     passwordError.value = 'Password must not exceed 25 characters'
   } else {
     passwordError.value = ''
+  }
+}
+
+const removeSpaces = (field) => {
+  if (field === 'username') {
+    username.value = username.value.replace(/\s/g, '')
+  } else if (field === 'email') {
+    email.value = email.value.replace(/\s/g, '')
+  } else if (field === 'password') {
+    password.value = password.value.replace(/\s/g, '')
   }
 }
 
@@ -119,20 +138,31 @@ const handleSignup = async () => {
     })
     
     const data = await response.json()
-    Cookies.set('username', username.value, { expires: 365 }) 
+    
+    if (!response.ok) {
+      // Reset both error messages first
+      emailError.value = ''
+      usernameError.value = ''
+      
+      // Set specific error based on the message
+      if (data.message === 'Email already exists') {
+        emailError.value = 'This email is already registered. Please use a different email.'
+      }
+      if (data.message === 'Username already exists') {
+        usernameError.value = 'This username is already taken. Please choose a different username.'
+      }
+      return
+    }
+
+    Cookies.set('username', username.value, { expires: 365 });
+
     username.value = ''
     email.value = ''
     password.value = ''
     signupSuccess.value = true
 
-    setTimeout(() => {
-      signupSuccess.value = false
-      emit('close')
-    }, 5000)
-
   } catch (error) {
     console.error('Signup failed:', error.response?.data || error.message)
-    // Here you might want to add error handling UI feedback
   }
 }
 

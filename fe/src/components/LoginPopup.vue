@@ -14,6 +14,7 @@
             required
             minlength="4"
             maxlength="50"
+            @keyup="removeSpaces('email')"
           >
         </div>
         <div class="form-group">
@@ -25,6 +26,7 @@
               required
               minlength="4"
               maxlength="25"
+              @keyup="removeSpaces('password')"
             >
             <button type="button" class="toggle-password" @click="togglePassword">
               <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
@@ -45,6 +47,8 @@
 
 <script setup>
 import { ref } from 'vue'
+import Cookies from 'js-cookie'
+import axios from 'axios'
 
 const props = defineProps({
   isVisible: Boolean
@@ -76,21 +80,15 @@ const handleLogin = async () => {
       return;
     }
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/login`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email.value,
-        password: password.value
-      })
+    const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/users/login`, {
+      email: email.value,
+      password: password.value
     });
-
-    const data = await response.json();
     
-    if (response.ok) {
-      localStorage.setItem('spellsbeeUser', JSON.stringify(data));
+    const data = response.data;
+    if (response.status === 200) {  
+      Cookies.set('username', data.username, { expires: 365 });
+      localStorage.setItem('userLoginData', JSON.stringify(data));
       emit('loginSuccess', data);
       close();
       window.location.reload();
@@ -103,12 +101,30 @@ const handleLogin = async () => {
     }
   } catch (error) {
     console.error('Login error:', error);
-    errorMessage.value = 'An error occurred. Please try again later.';
+    if (error.response) {
+      // Handle specific API error responses
+      const data = error.response.data;
+      if (data.isEmailVerified === false) {
+        errorMessage.value = 'Please verify your email account before login.';
+      } else {
+        errorMessage.value = data.message || 'Login failed. Please try again.';
+      }
+    } else {
+      errorMessage.value = 'An error occurred. Please try again later.';
+    }
   }
 }
 
 const togglePassword = () => {
   showPassword.value = !showPassword.value
+}
+
+const removeSpaces = (field) => {
+  if (field === 'email') {
+    email.value = email.value.replace(/\s/g, '')
+  } else if (field === 'password') {
+    password.value = password.value.replace(/\s/g, '')
+  }
 }
 </script>
 

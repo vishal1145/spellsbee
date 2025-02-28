@@ -8,7 +8,7 @@
       <form @submit.prevent="handleForgotPassword" v-if="!isSuccess">
         <div class="form-group">
           <label>Email</label>
-          <input type="email" v-model="email" required :disabled="isLoading">
+          <input type="email" v-model="email" required :disabled="isLoading" @keyup="removeSpaces">
         </div>
         <div class="form-actions">
           <div class="links">
@@ -75,6 +75,10 @@ const handleForgotPassword = async () => {
   } finally {
     isLoading.value = false
   }
+}
+
+const removeSpaces = () => {
+  email.value = email.value.replace(/\s/g, '')
 }
 </script>
 

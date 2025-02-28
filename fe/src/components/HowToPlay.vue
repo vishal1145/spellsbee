@@ -1,25 +1,25 @@
 <template>
   <div class="how-to-play">
-    <h1 class="title animate-fade-in text-[28px] font-semibold">Guide to Playing Spelling Bee</h1>
     <div class="instructions-container">
-      <div v-for="(instruction, index) in instructions" 
-           :key="index"
-           class="instruction-block"
-           :class="{ 'active': hoveredIndex === index }"
-           @mouseenter="hoveredIndex = index"
-           @mouseleave="hoveredIndex = null"
-           :style="{ animationDelay: `${index * 0.2}s` }">
-        <div class="number">
-          <span class="number-text">{{index + 1}}</span>
-          <svg class="hexagon" viewBox="0 0 24 24">
-            <path d="M12 2l10 6v8l-10 6-10-6V8z" />
-          </svg>
-        </div>
-        <div class="text-content">
-          <h3 class="instruction-title">{{ instruction.title }}</h3>
-          <p class="content">{{ instruction.content }}</p>
-        </div>
-      </div>
+       <div class="mt-[64px]">
+        <h1 class="text-[32px] font-semibold text-[#8B4513] font-lato text-center mb-4">
+            Spelling Bee Game
+        </h1>
+    </div>
+    
+      <p class="description mb-8">
+        Spelling Bee is a widely loved word game in the US with simple rules. Your goal is to create as many words as possible using a set of seven letters. Each day, you receive a new set consisting of six regular letters and one required letter. To form words of at least four letters, you can tap on the letters on the screen or use your keyboard. You may use any letter multiple times, but every word must include the central letter. The more words you find, the higher your score.
+      </p>
+      
+      <h2 class="subtitle mb-4">Game Rules</h2>
+      <ul class="rules-list">
+        <li v-for="(instruction, index) in instructions" 
+            :key="index"
+            class="rule-item">
+          <h3 class="rule-title">{{ instruction.title }}</h3>
+          <p class="rule-content">{{ instruction.content }}</p>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -62,167 +62,38 @@ export default {
   font-family: 'Lato', sans-serif;
 }
 
-.title {
-  font-size: 2rem;
-  font-weight: 600;
-  color: #1a1a1a;
-  text-align: center;
-  margin-bottom: 3rem;
-  background: linear-gradient(45deg, #333333, #000000);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-family: 'Lato', sans-serif;
+.description {
+  font-size: 14px; 
+  line-height: 1.6;
+  color: #4a4a4a;
 }
 
-.instructions-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.instruction-block {
-  position: relative;
-  padding: 1.5rem 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: slideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  opacity: 0;
-  border: 2px solid transparent;
-  transform-origin: center;
-  background-color: rgb(245, 245, 245);
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.instruction-block.active {
-  border-color: #FFE999;
-  transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.15);
-}
-
-.number {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: rotateIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.number-text {
-  position: relative;
-  z-index: 2;
-  color: #1a1a1a;
-  font-weight: 600;
-  font-size: 1.2rem;
-  animation: popIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 0.3s;
-  opacity: 0;
-  font-family: 'Lato', sans-serif;
-}
-
-.text-content {
-  flex: 1;
-}
-
-.instruction-title {
+.subtitle {
   font-size: 16px;
   font-weight: 600;
   color: #1a1a1a;
-  margin: 0 0 0.5rem 0;
-  animation: slideInRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 0.2s;
-  opacity: 0;
-  font-family: 'Lato', sans-serif;
 }
 
-.hexagon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  fill: #FFE999;
-  stroke: #1a1a1a;
-  stroke-width: 1;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.rules-list {
+  list-style-type: disc;
+  padding-left: 20px;
 }
 
-.active .hexagon {
-  fill: #e6c940;
-  transform: translate(-50%, -50%) scale(1.1) rotate(180deg);
+.rule-item {
+  margin-bottom: 24px;
 }
 
-.content {
+.rule-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.rule-content {
   font-size: 14px;
   line-height: 1.6;
   color: #4a4a4a;
-  margin: 0;
-  animation: slideInRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 0.4s;
-  opacity: 0;
-  font-family: 'Lato', sans-serif;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes rotateIn {
-  from {
-    transform: rotate(-180deg) scale(0.5);
-    opacity: 0;
-  }
-  to {
-    transform: rotate(0) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes popIn {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translateX(-15px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (max-width: 768px) {
@@ -230,32 +101,12 @@ export default {
     padding: 20px 16px;
   }
   
-  .title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
+  .description {
+    font-size: 14px;
   }
   
-  .instruction-block {
-    padding: 1.25rem;
-    gap: 1rem;
-  }
-  
-  .text-content {
-    flex: 1;
-  }
-  
-  .number {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .instruction-title {
-    font-size: 1.1rem;
-  }
-  
-  .content {
-    font-size: 1rem;
-    line-height: 1.5;
+  .subtitle {
+    font-size: 20px;
   }
 }
 </style>

@@ -47,8 +47,7 @@ const checkAndSetUserName = async () => {
       })
       
       if (response.status == 201) {
-        Cookies.set('username', credentials.username, { expires: 365 }) 
-        console.log('New user registered:', credentials.username)
+        Cookies.set('username', credentials.username, { expires: 365 }) ;
       } else {
         console.error('Failed to register user')
       }

@@ -47,22 +47,37 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: 'Please provide username, new username, email, and password' });
     }
 
+    // Validate username format
+    if (!/^[a-zA-Z0-9_]+$/.test(newusername)) {
+      return res.status(400).json({ 
+        message: 'Username can only contain letters, numbers, and underscore' 
+      });
+    }
+
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const existingUser = await User.findOne({
-      $or: [{ email }, { username: newusername }],
-      _id: { $ne: user._id }  
+    // Check for existing username case-insensitively
+    const existingUsername = await User.findOne({
+      username: { 
+        $regex: new RegExp(`^${newusername}$`, 'i') 
+      }
     });
 
-    if (existingUser) {
-      return res.status(400).json({ message: 'Email or Username already exists' });
+    if (existingUsername) {
+      return res.status(400).json({ message: 'Username already exists' });
+    }
+
+    // Check for existing email
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({ message: 'Email already exists' });
     }
 
     const verificationToken = crypto.randomBytes(32).toString('hex');
-    const verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours expiration
+    const verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
     user.username = newusername;
     user.email = email;
@@ -116,10 +131,8 @@ const loginUser = async (req, res) => {
     }
 
     res.status(200).json({
-      _id: user._id,
       username: user.username,
-      email: user.email,
-      isEmailVerified: true
+      email: user.email
     });
 
   } catch (error) {

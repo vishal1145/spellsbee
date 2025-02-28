@@ -21,15 +21,14 @@ let currentCenterLetter = currentDailyLetters[1];
 
 function generateDailyString() {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let result = '';
   const usedLetters = new Set();
   
   while (usedLetters.size < 7) {
     const letter = letters.charAt(Math.floor(Math.random() * letters.length));
     usedLetters.add(letter);
   }
-  
-  return Array.from(usedLetters).join('');
+ 
+  return Array.from(usedLetters); // Now returns an array instead of joined string
 }
 
 // Update letters at midnight
@@ -42,11 +41,8 @@ cron.schedule('0 0 * * *', () => {
 
 // Add new endpoint to get daily letters
 app.get('/api/daily-letters', (req, res) => {
-  console.log('Sending daily letters:', currentDailyLetters);
-  console.log('Sending center letter:', currentCenterLetter);
   res.json({ 
-    letters: currentDailyLetters,
-    centerLetter: currentCenterLetter  
+    letters: currentDailyLetters 
   });
 });
 
@@ -56,6 +52,7 @@ connectDB();
 app.use('/api/users', userRoutes);
 app.use('/api/spellsbee', spellsbeeRoutes);
 app.use('/api/stats', userStatsRoutes);
+
 // Basic route
 app.get('/', (req, res) => {
   res.send('API is running...');

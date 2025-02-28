@@ -138,16 +138,8 @@
                   class="tab-button"
                   :class="{ active: activeTab === 'stats' }"
                   @click="activeTab = 'stats'"
-                  v-if="gameMode === 'today'"
                 >
-                  Statics
-                </button>
-                <button
-                  class="tab-button"
-                  :class="{ active: activeTab === 'yesterday' }"
-                  @click="activeTab = 'yesterday'"
-                >
-                  {{ gameMode === 'unlimited' ? 'Statistics' : 'Previous' }}
+                  Statistics
                 </button>
                 <button
                   class="tab-button"
@@ -160,23 +152,15 @@
               </div>
 
               <!-- Stats Tab Content -->
-              <div v-if="activeTab === 'stats' && gameMode === 'today'" class="tab-content">
-                <div class="stats-checkboxes font-weight-[600]">
+              <div v-if="activeTab === 'stats'" class="tab-content">
+                <div class="stats-checkboxes font-weight-[600]" v-if="gameMode === 'today'">
                   <label class="checkbox-label">
                     <input
                       type="checkbox"
                       :checked="statsPeriod === 'thisWeek'"
                       @change="statsPeriod = 'thisWeek'"
                     />
-                    This Week
-                  </label>
-                  <label class="checkbox-label">
-                    <input
-                      type="checkbox"
-                      :checked="statsPeriod === 'lastWeek'"
-                      @change="statsPeriod = 'lastWeek'"
-                    />
-                    Last Week
+                    Last 7 days
                   </label>
                   <label class="checkbox-label">
                     <input
@@ -188,7 +172,7 @@
                   </label>
                 </div>
 
-                <div v-if="statsPeriod === 'thisWeek' || statsPeriod === 'lastWeek'" class="weekly-stats">
+                <div v-if="statsPeriod === 'thisWeek'" class="weekly-stats">
                   <div class="week-grid-vertical">
                     <div v-for="(day, index) in weekDays" :key="index" class="day-row">
                       <div class="day-label">{{ day.label }}</div>
@@ -250,81 +234,6 @@
                       Share
                     </div>
                   </button>
-                </div>
-              </div>
-
-              <!-- Yesterday Tab Content -->
-              <div v-if="activeTab === 'yesterday'" class="tab-content">
-                <div v-if="gameMode === 'unlimited'" class="stats-list">
-                  <ul>
-                    <li>
-                      <div>Words found</div>
-                      <div style="font-size: 16px; color: black; font-weight: 600;">0</div>
-                    </li>
-                    <li>
-                      <div>Games played</div>
-                      <div style="font-size: 16px; color: black; font-weight: 600;">0</div>
-                    </li>
-                    <li>
-                      <div>Average guessed words</div>
-                      <div style="font-size: 16px; color: black; font-weight: 600;">0</div>
-                    </li>
-                    <li>
-                      <div>Pangram found</div>
-                      <div style="font-size: 16px; color: black; font-weight: 600;">0</div>
-                    </li>
-                    <li>
-                      <div>Most frequent ranking</div>
-                      <div style="font-size: 16px; color: black; font-weight: 600;">0</div>
-                    </li>
-                  </ul>
-                  <button class="share-btn mt-4">
-                    <div class="flex items-center justify-center gap-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                      >
-                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
-                      </svg>
-                      Share
-                    </div>
-                  </button>
-                </div>
-                <div v-else class="text-[13px] text-[#666]">
-                  <div class="letters-display">D E K O R W Y</div>
-                  <div class="score-info">0 of 27 words | 0 of 117 points</div>
-                  <div class="word-chips ">
-                    <span class="word-chip text-[11px]">Dewy</span>
-                    <span class="word-chip text-[11px]">Doddery</span>
-                    <span class="word-chip text-[11px]">Dorky</span>
-                    <span class="word-chip text-[11px]">Dory</span>
-                    <span class="word-chip text-[11px]">Dowdy</span>
-                    <span class="word-chip text-[11px]">Dowry</span>
-                    <span class="word-chip text-[11px]">Dryer</span>
-                    <span class="word-chip text-[11px]">Dyed</span>
-                    <span class="word-chip text-[11px]">Dyer</span>
-                    <span class="word-chip text-[11px]">Eddy</span>
-                    <span class="word-chip text-[11px]">Eyed</span>
-                    <span class="word-chip text-[11px]">Keyed</span>
-                    <span class="word-chip pangram text-[11px]">Keyword</span>
-                    <span class="word-chip text-[11px]">Kooky</span>
-                    <span class="word-chip text-[11px]">Redye</span>
-                    <span class="word-chip text-[11px]">Redyed</span>
-                    <span class="word-chip text-[11px]">Reedy</span>
-                    <span class="word-chip text-[11px]">Rookery</span>
-                    <span class="word-chip text-[11px]">Rowdy</span>
-                    <span class="word-chip text-[11px]">Weedy</span>
-                    <span class="word-chip text-[11px]">Woody</span>
-                    <span class="word-chip text-[11px]">Wordy</span>
-                    <span class="word-chip text-[11px]">Worry</span>
-                    <span class="word-chip text-[11px]">Wryer</span>
-                    <span class="word-chip text-[11px]">Yoke</span>
-                    <span class="word-chip text-[11px]">Yoked</span>
-                    <span class="word-chip text-[11px]">Yore</span>
-                  </div>
                 </div>
               </div>
 
@@ -579,9 +488,56 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <Section title="Spelling Bee Game" />
+      <!-- Add this new popup component -->
+      <div v-if="showRankStats" class="popup-overlay" @click="closeRankStats">
+        <div class="popup-content rank-stats-popup" @click.stop>
+          <div class="popup-header">
+            <button class="back-btn" @click="closeRankStats">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="tab-buttons">
+              <button 
+                :class="{ active: activeRankTab === 'stats' }"
+                @click="activeRankTab = 'stats'"
+              >
+                Statics
+              </button>
+              <button 
+                :class="{ active: activeRankTab === 'previous' }"
+                @click="activeRankTab = 'previous'"
+              >
+                Previous
+              </button>
+            </div>
+          </div>
+
+          <div class="rank-stats-content">
+            <!-- Stats Tab Content -->
+            <div v-if="activeRankTab === 'stats'" class="stats-tab">
+              <div class="letters-display">
+                <span>D E K O R W Y</span>
+                <div class="points-info">0 of 27 words | 0 of 117 points</div>
+              </div>
+
+              <div class="words-grid">
+                <div v-for="word in rankWords" 
+                     :key="word" 
+                     class="word-item"
+                     :class="{ found: foundWords.includes(word) }">
+                  {{ word }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Previous Tab Content -->
+            <div v-if="activeRankTab === 'previous'" class="previous-tab">
+              <!-- Add your previous tab content here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
     <Play />
     <Faq />
     <Footer />
@@ -599,7 +555,6 @@
 </template>
 
 <script setup>
-import Section from './components/Section.vue'
 import Play from './components/HowToPlay.vue'
 import Faq from './components/Faq.vue'
 import Footer from './components/Footer.vue'
@@ -633,15 +588,15 @@ const gameToDelete = ref(null)
 const isDarkMode = ref(false)
 const currentWord = ref('')
 
-// Add these new refs
+
 const showPointsPopup = ref(false)
 const pointsEarned = ref(0)
 
-// Add new refs for validation messages
+
 const showValidationPopup = ref(false)
 const validationMessage = ref('')
 
-// Add new refs for points tracking
+
 const totalPoints = ref(0)  // Initialize points to 0
 const currentLevel = ref('B') // Starting level
 const levelThresholds = {
@@ -655,17 +610,17 @@ const levelThresholds = {
   G: 163   // Genius
 }
 
-// Add these new refs for user data
-const username = ref(Cookies.get('username') || '') // Get username from cookie
+
+const username = ref(Cookies.get('username') || null) // Get username from cookie
 const userPoints = ref(0)
 const userWords = ref([])
 const isLoading = ref(true) // This is the only isLoading declaration we'll keep
 
-// Add these new refs
+
 const letters = ref(['H', 'D', 'Z', 'N', 'X', 'V', 'W'])
 const centerLetter = ref('X')
 
-// Inside the setup function, get router instance
+
 const router = useRouter()
 
 const toggleMenu = () => {
@@ -680,7 +635,7 @@ const toggleDarkMode = () => {
   isDarkMode.value = !isDarkMode.value
 }
 
-// Click outside directive
+
 const vClickOutside = {
   mounted(el, binding) {
     el._clickOutside = (event) => {
@@ -732,8 +687,7 @@ const toggleFoundWords = () => {
 
 const setGameMode = (mode) => {
   gameMode.value = mode
-  // Set default active tab based on game mode
-  activeTab.value = mode === 'today' ? 'stats' : 'yesterday'
+  activeTab.value = 'stats' // Always default to stats tab when changing modes
 }
 
 const generateRandomWord = () => {
@@ -854,14 +808,14 @@ const updatePointsAndLevel = () => {
     }
   }
 
-  // Calculate points needed for next level
+ 
   const currentThreshold = levelThresholds[currentLevel.value]
   const levels = Object.keys(levelThresholds)
   const currentIndex = levels.indexOf(currentLevel.value)
   const nextLevel = levels[currentIndex + 1]
   const pointsToNext = nextLevel ? levelThresholds[nextLevel] - points : 0
 
-  // Update the subtext
+ 
   const subtext = nextLevel ? 
     `( ${points} points | Just ${pointsToNext} more to reach ${nextLevel} level )` :
     `( ${points} points | Maximum level reached! )`
@@ -876,7 +830,6 @@ const updatePointsAndLevel = () => {
   saveGameState()
 }
 
-// Function to save game state to cookies
 const saveGameState = () => {
   try {
     const gameState = {
@@ -891,7 +844,6 @@ const saveGameState = () => {
   }
 }
 
-// Function to load game state from cookies
 const loadGameState = () => {
   try {
     const savedState = localStorage.getItem('spellsbeeGameState')
@@ -907,7 +859,6 @@ const loadGameState = () => {
   }
 }
 
-// Add this function to fetch user data
 const fetchUserData = async () => {
   if (!username.value) {
     console.log('No username available, skipping fetch')
@@ -917,22 +868,15 @@ const fetchUserData = async () => {
   isLoading.value = true
   try {
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/stats/user/${username.value}`)
-    
     if (response.data) {
       userPoints.value = response.data.points || 0
       userWords.value = response.data.words || []
-      foundWords.value = userWords.value // Update foundWords with fetched words
-      
-      // Update total points and level
+      foundWords.value = userWords.value  
       totalPoints.value = userPoints.value
       updatePointsAndLevel()
-
-      // Save to local storage
-      saveGameState()
     }
   } catch (error) {
     console.error('Error fetching user data:', error)
-    // Reset to default values on error
     userPoints.value = 0
     userWords.value = []
     foundWords.value = []
@@ -942,37 +886,27 @@ const fetchUserData = async () => {
   }
 }
 
-// Add this function to fetch daily letters
 const fetchDailyLetters = async () => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/daily-letters`)
-    letters.value = response.data.letters.split('')
-    centerLetter.value = response.data.centerLetter
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/daily-letters`);
+    letters.value = response.data.letters;
+    centerLetter.value = response.data.letters[1];
     isLoading.value = false
   } catch (error) {
     console.error('Error fetching daily letters:', error)
-    // Fallback to default letters if API fails
     letters.value = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
     centerLetter.value = 'B'
     isLoading.value = false
   }
 }
 
-// Update submitWord function to use dynamic center letter
 const submitWord = async () => {
-  if (!username.value) {
-    validationMessage.value = 'Please set a username first'
-    showValidationPopup.value = true
-    setTimeout(() => {
-      showValidationPopup.value = false
-    }, 1500)
-    return
+  if(username.value === null){
+     username.value = Cookies.get('username');
   }
-
   try {
-    // Validate center letter first
     if (!currentWord.value.includes(centerLetter.value)) {
-      validationMessage.value = `Word must include the center letter "${centerLetter.value}"`
+      validationMessage.value = `Word must include the green letter "${centerLetter.value}"`
       showValidationPopup.value = true
       setTimeout(() => {
         showValidationPopup.value = false
@@ -998,7 +932,6 @@ const submitWord = async () => {
       return
     }
 
-    // Validate word with the API
     const validateResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/spellsbee/validate/${currentWord.value}`)
     
     if (validateResponse.data.isValid) {
@@ -1007,22 +940,18 @@ const submitWord = async () => {
         word: currentWord.value,
         points: calculatePoints(currentWord.value)
       })
-      
+
       if (saveResponse.data) {
-        // Add word to found words
         foundWords.value.push(currentWord.value)
         
-        // Calculate points for this word
         const newPoints = calculatePoints(currentWord.value)
         pointsEarned.value = newPoints
         
-        // Show points popup
         showPointsPopup.value = true
         setTimeout(() => {
           showPointsPopup.value = false
         }, 1500)
 
-        // Fetch updated user data
         await fetchUserData()
       }
     } else {
@@ -1041,14 +970,11 @@ const submitWord = async () => {
     }, 1500)
   }
   
-  // Clear the current word
   currentWord.value = ''
 }
 
-// Add to onMounted
 onMounted(async () => {
-  loadUserProfile() // Load user profile first
-  loadGameState() // Load saved game state
+  loadUserProfile() // Load user profile from cookies
   await fetchDailyLetters() // Wait for letters to load
   await fetchUserData() // Then fetch user data
   
@@ -1057,13 +983,11 @@ onMounted(async () => {
   document.addEventListener('click', handleClickOutside)
 })
 
-// Remove event listener when component unmounts
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyPress)
   document.removeEventListener('click', handleClickOutside)
 })
 
-// Update handleKeyPress to use dynamic letters
 const handleKeyPress = (event) => {
   const key = event.key.toUpperCase()
   
@@ -1077,7 +1001,6 @@ const handleKeyPress = (event) => {
     return
   }
 
-  // Check if the pressed key matches any of the valid letters
   if (letters.value.includes(key)) {
     addLetter(key)
   }
@@ -1088,14 +1011,7 @@ watch(foundWords, () => {
   updatePointsAndLevel()
 }, { deep: true })
 
-// Watch for changes in username
-watch(username, (newUsername) => {
-  if (newUsername) {
-    Cookies.set('username', newUsername, { expires: 365 })
-  }  
-})
 
-// Add this function to determine background color
 const getRankBackground = (letter, index) => {
   const ranks = ['B', 'N', 'A', 'V', 'S', 'F', 'E', 'G']
   const currentRankIndex = ranks.indexOf(currentLevel.value)
@@ -1109,7 +1025,6 @@ const getRankBackground = (letter, index) => {
   }
 }
 
-// Add this new function to get tooltip text for each rank
 const getRankTooltip = (letter) => {
   const rankInfo = {
     'B': 'Beginner (0 points)',
@@ -1126,7 +1041,6 @@ const getRankTooltip = (letter) => {
 
 const activePopup = ref(null)
 
-// Add login related functions
 const showLoginPopup = () => {
   activePopup.value = 'login'
 }
@@ -1138,10 +1052,11 @@ const closePopup = () => {
 // Add these new functions
 const loadUserProfile = () => {
   try {
-    const userData = localStorage.getItem('spellsbeeUser')
+
+    const userData = localStorage.getItem('userLoginData');
+
     if (userData) {
       userProfile.value = JSON.parse(userData)
-      // Also update username if available
       if (userProfile.value?.username) {
         username.value = userProfile.value.username
       }
@@ -1156,17 +1071,14 @@ const toggleProfileMenu = () => {
   showProfileMenu.value = !showProfileMenu.value
 }
 
-// Then update the navigation methods to use router
 const logout = () => {
-  localStorage.removeItem('spellsbeeUser');
-  Cookies.remove('username');
+  Cookies.remove('username'); 
+  localStorage.removeItem('userLoginData');
   userProfile.value = null
   showProfileMenu.value = false
-  // Reload the page instead of using router
   window.location.reload()
 }
 
-// Close dropdown when clicking outside
 const handleClickOutside = (event) => {
   if (profileBtn.value && 
       profileMenu.value && 
@@ -1246,13 +1158,41 @@ const rankDetails = {
 
 // Add these new functions
 const showRankPopup = (letter) => {
-  selectedRank.value = rankDetails[letter]
-  showRankDetails.value = true
+  if (letter === 'B') { // Show stats popup only for Beginner rank
+    showRankStats.value = true
+  } else {
+    selectedRank.value = rankDetails[letter]
+    showRankDetails.value = true
+  }
 }
 
 const closeRankPopup = () => {
   showRankDetails.value = false
 }
+
+const showRankStats = ref(false)
+const activeRankTab = ref('stats')
+
+// Sample words array - replace with your actual words
+const rankWords = [
+  'Dewy', 'Doddery', 'Dorky', 'Dory', 'Dowdy',
+  'Dowry', 'Dryer', 'Dyed', 'Dyer', 'Eddy',
+  'Eyed', 'Keyed', 'Keyword', 'Kooky',
+  'Redye', 'Redyed', 'Reedy', 'Rookery',
+  'Rowdy', 'Weedy', 'Woody', 'Wordy',
+  'Worry', 'Wryer', 'Yoke', 'Yoked', 'Yore'
+]
+
+const closeRankStats = () => {
+  showRankStats.value = false
+}
+
+// Add this new function
+const openRankStatsPopup = () => {
+  showRankStats.value = true
+  activeRankTab.value = 'stats' // Set default tab to stats
+}
+
 </script>
 
 <style scoped>
@@ -3295,6 +3235,123 @@ ul {
   
   .rank-details .description {
     color: #999;
+  }
+}
+
+/* Add these new styles */
+.rank-stats-popup {
+  width: 95%;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-buttons {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+  justify-content: center;
+}
+
+.tab-buttons button {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.tab-buttons button.active {
+  background: #ffe999;
+  color: #333;
+}
+
+.letters-display {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.letters-display span {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 2px;
+}
+
+.points-info {
+  font-size: 14px;
+  color: #666;
+  margin-top: 8px;
+}
+
+.words-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  padding: 16px;
+}
+
+.word-item {
+  padding: 8px 12px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  color: #666;
+}
+
+.word-item.found {
+  background: #28a745;
+  color: white;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .back-btn {
+    color: #999;
+  }
+
+  .tab-buttons button {
+    color: #999;
+  }
+
+  .tab-buttons button.active {
+    background: #ffe999;
+    color: #333;
+  }
+
+  .points-info {
+    color: #999;
+  }
+
+  .word-item {
+    background: #333;
+    color: #999;
+  }
+
+  .word-item.found {
+    background: #28a745;
+    color: white;
   }
 }
 </style>
