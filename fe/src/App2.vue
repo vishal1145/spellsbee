@@ -1,18 +1,18 @@
 <template>
   <div>
     <div class="game-container">
-      <LoginPopup 
+      <LoginPopup
         :is-visible="activePopup === 'login'"
         @close="closePopup"
         @show-signup="activePopup = 'signup'"
         @show-forgot-password="activePopup = 'forgotPassword'"
       />
-      <SignupPopup 
+      <SignupPopup
         :is-visible="activePopup === 'signup'"
         @close="closePopup"
         @show-login="activePopup = 'login'"
       />
-      <ForgotPasswordPopup 
+      <ForgotPasswordPopup
         :is-visible="activePopup === 'forgotPassword'"
         @close="closePopup"
         @show-login="activePopup = 'login'"
@@ -63,7 +63,7 @@
             <button class="profile-btn" @click="toggleProfileMenu" ref="profileBtn">
               <div class="avatar">{{ userProfile.username[0].toUpperCase() }}</div>
             </button>
-            
+
             <!-- Profile dropdown menu -->
             <div v-if="showProfileMenu" class="profile-dropdown" ref="profileMenu">
               <div class="profile-header">
@@ -99,8 +99,8 @@
               </div>
 
               <div class="progress-dots">
-                <span 
-                  v-for="(letter, index) in ['B', 'N', 'A', 'V', 'S', 'F', 'E', 'G']" 
+                <span
+                  v-for="(letter, index) in ['B', 'N', 'A', 'V', 'S', 'F', 'E', 'G']"
                   :key="letter"
                   class="dot w-[20px] h-[20px]"
                   :style="{ backgroundColor: getRankBackground(letter, index) }"
@@ -121,9 +121,7 @@
                   No correct words entered by you
                 </div>
                 <div v-else class="word-chips text-[14px]">
-                  <span v-for="word in foundWords" 
-                        :key="word" 
-                        class="word-chip">
+                  <span v-for="word in foundWords" :key="word" class="word-chip">
                     {{ word }}
                   </span>
                 </div>
@@ -190,7 +188,9 @@
                         height="16"
                         fill="currentColor"
                       >
-                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+                        <path
+                          d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"
+                        />
                       </svg>
                       Share
                     </div>
@@ -201,23 +201,23 @@
                   <ul>
                     <li>
                       <div>Words found</div>
-                       <div style="font-size: 16px; color: black; font-weight: 600;">0</div>
+                      <div style="font-size: 16px; color: black; font-weight: 600">0</div>
                     </li>
                     <li>
                       <div>Games played</div>
-                      <div  style="font-size: 16px; color: black; font-weight: 600;">0</div>
+                      <div style="font-size: 16px; color: black; font-weight: 600">0</div>
                     </li>
                     <li>
                       <div>Average guessed words</div>
-                      <div   style="font-size: 16px; color: black; font-weight: 600;">0</div>
+                      <div style="font-size: 16px; color: black; font-weight: 600">0</div>
                     </li>
                     <li>
                       <div>Pangram found</div>
-                      <div  style="font-size: 16px; color: black; font-weight: 600;">0</div>
+                      <div style="font-size: 16px; color: black; font-weight: 600">0</div>
                     </li>
                     <li>
                       <div>Most frequent ranking</div>
-                        <div style="font-size: 16px; color: black; font-weight: 600;">0</div>
+                      <div style="font-size: 16px; color: black; font-weight: 600">0</div>
                     </li>
                   </ul>
                   <button class="share-btn mt-4">
@@ -229,7 +229,9 @@
                         height="16"
                         fill="currentColor"
                       >
-                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+                        <path
+                          d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"
+                        />
                       </svg>
                       Share
                     </div>
@@ -244,8 +246,8 @@
                     <div class="game-content">
                       <div class="game-info">
                         <div class="letters-column">
-                          <span 
-                            v-for="(letter, i) in game.letters" 
+                          <span
+                            v-for="(letter, i) in game.letters"
                             :key="i"
                             :class="{ 'center-letter': letter === game.centerLetter }"
                             class="letter-tile"
@@ -273,10 +275,12 @@
         <div class="right-section2">
           <!-- Add cursor animation to word display -->
           <div class="current-word">
-            <span v-for="(letter, index) in currentWord" 
-                  :key="index" 
-                  :class="{ 'green-letter': letter === 'A' }"
-                  class="word-letter">
+            <span
+              v-for="(letter, index) in currentWord"
+              :key="index"
+              :class="{ 'green-letter': letter === 'A' }"
+              class="word-letter"
+            >
               {{ letter }}
             </span>
             <span class="cursor">|</span>
@@ -284,50 +288,57 @@
 
           <div class="hexagon-section">
             <div v-if="!isLoading" class="hexagon-grid">
+              <!-- First row -->
               <div class="hexagon-row">
-                <div 
-                  v-for="(letter, index) in [letters[0], centerLetter, letters[2]]" 
+                <div
+                  v-for="(letter, index) in [letters[0], centerLetter, letters[2]]"
                   :key="index"
                   :class="{ 'center-letter': letter === centerLetter }"
-                  class="circle" 
+                  class="circle"
                   @click="addLetter(letter)"
                 >
                   {{ letter }}
                 </div>
+                <!-- Right arrow for first row -->
+                <button class="arrow-btn" @click="deleteLastLetter" title="Delete last letter">
+                  <i class="fas fa-arrow-left"></i>
+                </button>
               </div>
+
+              <!-- Second row -->
               <div class="hexagon-row">
-                <div 
-                  v-for="(letter, index) in letters.slice(3)" 
+                <div
+                  v-for="(letter, index) in letters.slice(3)"
                   :key="index + 3"
-                  class="circle" 
+                  class="circle"
                   @click="addLetter(letter)"
                 >
                   {{ letter }}
                 </div>
               </div>
             </div>
-            <div v-else class="loading-spinner">
-              Loading...
-            </div>
-            
+            <div v-else class="loading-spinner">Loading...</div>
+
             <div class="controls">
-              <div class="flex justify-end gap-2">
-                <a class="text-[14px] underline cursor-pointer" 
-                   @click="clearWord" 
-                   title="Reset all letters">Reset</a>
-                <a class="text-[14px] underline cursor-pointer" 
-                   @click="deleteLastLetter" 
-                   title="Delete last letter">Delete</a>
+              <div class="flex justify-end">
+                <a
+                  class="text-[14px] underline cursor-pointer"
+                  @click="deleteLastLetter"
+                  title="Delete last letter"
+                  >Delete</a
+                >
               </div>
               <div>
-                <button class="right-section-btn" 
-                        style="width: 100%" 
-                        @click="submitWord">Submit</button>
+                <button class="right-section-btn" style="width: 100%" @click="submitWord">
+                  Submit
+                </button>
               </div>
 
               <div style="display: flex; gap: 10px; justify-content: center">
-                
-                <button class="right-section-btn " style="width: 100%; background: #28a745; color: white">
+                <button
+                  class="right-section-btn"
+                  style="width: 100%; background: #28a745; color: white"
+                >
                   Ranking
                 </button>
               </div>
@@ -343,10 +354,10 @@
             <h2 class="text-[16px] font-[600] text-[#333]">How to Play</h2>
             <button class="close-btn" @click="showHowToPlay = false">×</button>
           </div>
-          
+
           <div class="popup-body">
             <p class="text-[14px] mb-[16px] text-[#666]">Create words using the letters shown.</p>
-            
+
             <div class="rules-section mb-[24px]">
               <ul class="text-[14px] space-y-[12px] text-[#444]">
                 <li class="flex items-start gap-2">
@@ -363,7 +374,10 @@
                 </li>
                 <li class="flex items-start gap-2">
                   <span class="bullet">•</span>
-                  <span>Words with hyphens, proper nouns, vulgarities, and especially obscure words are not in the word list.</span>
+                  <span
+                    >Words with hyphens, proper nouns, vulgarities, and especially obscure words are
+                    not in the word list.</span
+                  >
                 </li>
               </ul>
             </div>
@@ -381,7 +395,10 @@
                 </li>
                 <li class="flex items-start gap-2">
                   <span class="bullet">•</span>
-                  <span>Pangrams — words that use all seven letters — earn an additional bonus of 7 points. There is at least one pangram per puzzle.</span>
+                  <span
+                    >Pangrams — words that use all seven letters — earn an additional bonus of 7
+                    points. There is at least one pangram per puzzle.</span
+                  >
                 </li>
               </ul>
             </div>
@@ -437,8 +454,8 @@
               <div class="game-content">
                 <div class="game-info">
                   <div class="letters-column">
-                    <span 
-                      v-for="(letter, i) in game.letters" 
+                    <span
+                      v-for="(letter, i) in game.letters"
                       :key="i"
                       :class="{ 'center-letter': letter === game.centerLetter }"
                       class="letter-tile"
@@ -483,7 +500,7 @@
           <div class="popup-body">
             <div class="rank-details">
               <div class="points">Points needed: {{ selectedRank.points }}</div>
-              <div class="description">{{ selectedRank.description }}</div> 
+              <div class="description">{{ selectedRank.description }}</div>
             </div>
           </div>
         </div>
@@ -497,13 +514,13 @@
               <i class="fas fa-arrow-left"></i>
             </button>
             <div class="tab-buttons">
-              <button 
+              <button
                 :class="{ active: activeRankTab === 'stats' }"
                 @click="activeRankTab = 'stats'"
               >
                 Statics
               </button>
-              <button 
+              <button
                 :class="{ active: activeRankTab === 'previous' }"
                 @click="activeRankTab = 'previous'"
               >
@@ -521,10 +538,12 @@
               </div>
 
               <div class="words-grid">
-                <div v-for="word in rankWords" 
-                     :key="word" 
-                     class="word-item"
-                     :class="{ found: foundWords.includes(word) }">
+                <div
+                  v-for="word in rankWords"
+                  :key="word"
+                  class="word-item"
+                  :class="{ found: foundWords.includes(word) }"
+                >
                   {{ word }}
                 </div>
               </div>
@@ -537,15 +556,13 @@
           </div>
         </div>
       </div>
-    </div> 
+    </div>
     <Play />
     <Faq />
     <Footer />
 
     <!-- Add this new popup for points -->
-    <div v-if="showPointsPopup" class="points-popup">
-      +{{ pointsEarned }} points
-    </div>
+    <div v-if="showPointsPopup" class="points-popup">+{{ pointsEarned }} points</div>
 
     <!-- Add validation popup -->
     <div v-if="showValidationPopup" class="validation-popup">
@@ -588,38 +605,32 @@ const gameToDelete = ref(null)
 const isDarkMode = ref(false)
 const currentWord = ref('')
 
-
 const showPointsPopup = ref(false)
 const pointsEarned = ref(0)
-
 
 const showValidationPopup = ref(false)
 const validationMessage = ref('')
 
-
-const totalPoints = ref(0)  // Initialize points to 0
+const totalPoints = ref(0) // Initialize points to 0
 const currentLevel = ref('B') // Starting level
 const levelThresholds = {
-  B: 0,    // Beginner
-  N: 11,   // Novice 
-  A: 23,   // Advanced
-  V: 34,   // Very Good
-  S: 46,   // Superb
-  F: 93,   // Fabulous
-  E: 128,  // Exceptional
-  G: 163   // Genius
+  B: 0, // Beginner
+  N: 11, // Novice
+  A: 23, // Advanced
+  V: 34, // Very Good
+  S: 46, // Superb
+  F: 93, // Fabulous
+  E: 128, // Exceptional
+  G: 163, // Genius
 }
 
-
-const username = ref(Cookies.get('username') || null) // Get username from cookie
+const username = ref(Cookies.get('spellsBeeUsername') || null) // Get username from cookie
 const userPoints = ref(0)
 const userWords = ref([])
 const isLoading = ref(true) // This is the only isLoading declaration we'll keep
 
-
 const letters = ref(['H', 'D', 'Z', 'N', 'X', 'V', 'W'])
 const centerLetter = ref('X')
-
 
 const router = useRouter()
 
@@ -634,7 +645,6 @@ const closeMenu = () => {
 const toggleDarkMode = () => {
   isDarkMode.value = !isDarkMode.value
 }
-
 
 const vClickOutside = {
   mounted(el, binding) {
@@ -751,27 +761,27 @@ const closeGames = () => {
 
 const showTooltip = (event, letter) => {
   // Remove any existing tooltips
-  const existingTooltip = document.querySelector('.tooltip');
+  const existingTooltip = document.querySelector('.tooltip')
   if (existingTooltip) {
-    existingTooltip.remove();
+    existingTooltip.remove()
   }
 
   // Create and show new tooltip
-  const tooltip = document.createElement('div');
-  tooltip.className = 'tooltip';
-  tooltip.textContent = `Letter ${letter}`;
-  
+  const tooltip = document.createElement('div')
+  tooltip.className = 'tooltip'
+  tooltip.textContent = `Letter ${letter}`
+
   // Position tooltip above the circle
-  const rect = event.target.getBoundingClientRect();
-  tooltip.style.left = `${rect.left + (rect.width / 2)}px`;
-  tooltip.style.top = `${rect.top - 40}px`;
-  
-  document.body.appendChild(tooltip);
-  
+  const rect = event.target.getBoundingClientRect()
+  tooltip.style.left = `${rect.left + rect.width / 2}px`
+  tooltip.style.top = `${rect.top - 40}px`
+
+  document.body.appendChild(tooltip)
+
   // Remove tooltip after 2 seconds
   setTimeout(() => {
-    tooltip.remove();
-  }, 2000);
+    tooltip.remove()
+  }, 2000)
 }
 
 const addLetter = (letter) => {
@@ -798,7 +808,7 @@ const updatePointsAndLevel = () => {
   const points = foundWords.value.reduce((total, word) => {
     return total + calculatePoints(word)
   }, 0)
-  
+
   totalPoints.value = points
 
   // Update level based on points
@@ -808,17 +818,15 @@ const updatePointsAndLevel = () => {
     }
   }
 
- 
   const currentThreshold = levelThresholds[currentLevel.value]
   const levels = Object.keys(levelThresholds)
   const currentIndex = levels.indexOf(currentLevel.value)
   const nextLevel = levels[currentIndex + 1]
   const pointsToNext = nextLevel ? levelThresholds[nextLevel] - points : 0
 
- 
-  const subtext = nextLevel ? 
-    `( ${points} points | Just ${pointsToNext} more to reach ${nextLevel} level )` :
-    `( ${points} points | Maximum level reached! )`
+  const subtext = nextLevel
+    ? `( ${points} points | Just ${pointsToNext} more to reach ${nextLevel} level )`
+    : `( ${points} points | Maximum level reached! )`
 
   // Update DOM element
   const subtextElement = document.querySelector('.subtext')
@@ -836,7 +844,7 @@ const saveGameState = () => {
       username: username.value,
       points: totalPoints.value,
       words: foundWords.value,
-      level: currentLevel.value
+      level: currentLevel.value,
     }
     localStorage.setItem('spellsbeeGameState', JSON.stringify(gameState))
   } catch (error) {
@@ -864,14 +872,16 @@ const fetchUserData = async () => {
     console.log('No username available, skipping fetch')
     return
   }
-  
+
   isLoading.value = true
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/stats/user/${username.value}`)
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/stats/user/${username.value}`,
+    )
     if (response.data) {
       userPoints.value = response.data.points || 0
       userWords.value = response.data.words || []
-      foundWords.value = userWords.value  
+      foundWords.value = userWords.value
       totalPoints.value = userPoints.value
       updatePointsAndLevel()
     }
@@ -888,9 +898,9 @@ const fetchUserData = async () => {
 
 const fetchDailyLetters = async () => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/daily-letters`);
-    letters.value = response.data.letters;
-    centerLetter.value = response.data.letters[1];
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/daily-letters`)
+    letters.value = response.data.letters
+    centerLetter.value = response.data.letters[1]
     isLoading.value = false
   } catch (error) {
     console.error('Error fetching daily letters:', error)
@@ -901,8 +911,8 @@ const fetchDailyLetters = async () => {
 }
 
 const submitWord = async () => {
-  if(username.value === null){
-     username.value = Cookies.get('username');
+  if (username.value === null) {
+    username.value = Cookies.get('spellsBeeUsername')
   }
   try {
     if (!currentWord.value.includes(centerLetter.value)) {
@@ -932,21 +942,25 @@ const submitWord = async () => {
       return
     }
 
-    const validateResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/spellsbee/validate/${currentWord.value}`)
-    
+    const validateResponse = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/spellsbee/validate/${currentWord.value}`,
+    )
+
     if (validateResponse.data.isValid) {
-     
-      const saveResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/stats/user/${username.value}`, {
-        word: currentWord.value,
-        points: calculatePoints(currentWord.value)
-      })
+      const saveResponse = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/stats/user/${username.value}`,
+        {
+          word: currentWord.value,
+          points: calculatePoints(currentWord.value),
+        },
+      )
 
       if (saveResponse.data) {
         foundWords.value.push(currentWord.value)
-        
+
         const newPoints = calculatePoints(currentWord.value)
         pointsEarned.value = newPoints
-        
+
         showPointsPopup.value = true
         setTimeout(() => {
           showPointsPopup.value = false
@@ -969,7 +983,7 @@ const submitWord = async () => {
       showValidationPopup.value = false
     }, 1500)
   }
-  
+
   currentWord.value = ''
 }
 
@@ -977,7 +991,7 @@ onMounted(async () => {
   loadUserProfile() // Load user profile from cookies
   await fetchDailyLetters() // Wait for letters to load
   await fetchUserData() // Then fetch user data
-  
+
   // Add event listeners
   window.addEventListener('keydown', handleKeyPress)
   document.addEventListener('click', handleClickOutside)
@@ -990,7 +1004,7 @@ onUnmounted(() => {
 
 const handleKeyPress = (event) => {
   const key = event.key.toUpperCase()
-  
+
   if (event.key === 'Backspace' || event.key === 'Delete') {
     deleteLastLetter()
     return
@@ -1007,15 +1021,18 @@ const handleKeyPress = (event) => {
 }
 
 // Watch for changes in foundWords and update points
-watch(foundWords, () => {
-  updatePointsAndLevel()
-}, { deep: true })
-
+watch(
+  foundWords,
+  () => {
+    updatePointsAndLevel()
+  },
+  { deep: true },
+)
 
 const getRankBackground = (letter, index) => {
   const ranks = ['B', 'N', 'A', 'V', 'S', 'F', 'E', 'G']
   const currentRankIndex = ranks.indexOf(currentLevel.value)
-  
+
   if (index <= currentRankIndex) {
     return '#28a745' // Green for current and previous ranks
   } else if (index === currentRankIndex + 1) {
@@ -1027,14 +1044,14 @@ const getRankBackground = (letter, index) => {
 
 const getRankTooltip = (letter) => {
   const rankInfo = {
-    'B': 'Beginner (0 points)',
-    'N': 'Novice (11 points)',
-    'A': 'Advanced (23 points)',
-    'V': 'Very Good (34 points)',
-    'S': 'Superb (46 points)',
-    'F': 'Fabulous (93 points)',
-    'E': 'Exceptional (128 points)',
-    'G': 'Genius (163 points)'
+    B: 'Beginner (0 points)',
+    N: 'Novice (11 points)',
+    A: 'Advanced (23 points)',
+    V: 'Very Good (34 points)',
+    S: 'Superb (46 points)',
+    F: 'Fabulous (93 points)',
+    E: 'Exceptional (128 points)',
+    G: 'Genius (163 points)',
   }
   return rankInfo[letter]
 }
@@ -1052,8 +1069,7 @@ const closePopup = () => {
 // Add these new functions
 const loadUserProfile = () => {
   try {
-
-    const userData = localStorage.getItem('userLoginData');
+    const userData = localStorage.getItem('userLoginData')
 
     if (userData) {
       userProfile.value = JSON.parse(userData)
@@ -1072,18 +1088,20 @@ const toggleProfileMenu = () => {
 }
 
 const logout = () => {
-  Cookies.remove('username'); 
-  localStorage.removeItem('userLoginData');
+  Cookies.remove('spellsBeeUsername')
+  localStorage.removeItem('userLoginData')
   userProfile.value = null
   showProfileMenu.value = false
   window.location.reload()
 }
 
 const handleClickOutside = (event) => {
-  if (profileBtn.value && 
-      profileMenu.value && 
-      !profileBtn.value.contains(event.target) && 
-      !profileMenu.value.contains(event.target)) {
+  if (
+    profileBtn.value &&
+    profileMenu.value &&
+    !profileBtn.value.contains(event.target) &&
+    !profileMenu.value.contains(event.target)
+  ) {
     showProfileMenu.value = false
   }
 }
@@ -1109,56 +1127,57 @@ const showRankDetails = ref(false)
 const selectedRank = ref({
   title: '',
   points: 0,
-  description: ''
+  description: '',
 })
 
 // Add this new object for rank details
 const rankDetails = {
-  'B': {
+  B: {
     title: 'Beginner',
     points: 0,
-    description: 'Starting rank for all players. Keep playing to improve!'
+    description: 'Starting rank for all players. Keep playing to improve!',
   },
-  'N': {
+  N: {
     title: 'Novice',
     points: 11,
-    description: 'You\'re getting the hang of it! Keep finding more words.'
+    description: "You're getting the hang of it! Keep finding more words.",
   },
-  'A': {
+  A: {
     title: 'Advanced',
     points: 23,
-    description: 'You\'re making good progress. Your vocabulary is expanding!'
+    description: "You're making good progress. Your vocabulary is expanding!",
   },
-  'V': {
+  V: {
     title: 'Very Good',
     points: 34,
-    description: 'Impressive word skills! You\'re becoming a word master.'
+    description: "Impressive word skills! You're becoming a word master.",
   },
-  'S': {
+  S: {
     title: 'Superb',
     points: 46,
-    description: 'Outstanding performance! Your word knowledge is remarkable.'
+    description: 'Outstanding performance! Your word knowledge is remarkable.',
   },
-  'F': {
+  F: {
     title: 'Fabulous',
     points: 93,
-    description: 'Exceptional word mastery! You\'re among the top players.'
+    description: "Exceptional word mastery! You're among the top players.",
   },
-  'E': {
+  E: {
     title: 'Exceptional',
     points: 128,
-    description: 'Amazing achievement! Your word skills are extraordinary.'
+    description: 'Amazing achievement! Your word skills are extraordinary.',
   },
-  'G': {
+  G: {
     title: 'Genius',
     points: 163,
-    description: 'Ultimate mastery! You\'ve reached the highest rank possible.'
-  }
+    description: "Ultimate mastery! You've reached the highest rank possible.",
+  },
 }
 
 // Add these new functions
 const showRankPopup = (letter) => {
-  if (letter === 'B') { // Show stats popup only for Beginner rank
+  if (letter === 'B') {
+    // Show stats popup only for Beginner rank
     showRankStats.value = true
   } else {
     selectedRank.value = rankDetails[letter]
@@ -1175,12 +1194,33 @@ const activeRankTab = ref('stats')
 
 // Sample words array - replace with your actual words
 const rankWords = [
-  'Dewy', 'Doddery', 'Dorky', 'Dory', 'Dowdy',
-  'Dowry', 'Dryer', 'Dyed', 'Dyer', 'Eddy',
-  'Eyed', 'Keyed', 'Keyword', 'Kooky',
-  'Redye', 'Redyed', 'Reedy', 'Rookery',
-  'Rowdy', 'Weedy', 'Woody', 'Wordy',
-  'Worry', 'Wryer', 'Yoke', 'Yoked', 'Yore'
+  'Dewy',
+  'Doddery',
+  'Dorky',
+  'Dory',
+  'Dowdy',
+  'Dowry',
+  'Dryer',
+  'Dyed',
+  'Dyer',
+  'Eddy',
+  'Eyed',
+  'Keyed',
+  'Keyword',
+  'Kooky',
+  'Redye',
+  'Redyed',
+  'Reedy',
+  'Rookery',
+  'Rowdy',
+  'Weedy',
+  'Woody',
+  'Wordy',
+  'Worry',
+  'Wryer',
+  'Yoke',
+  'Yoked',
+  'Yore',
 ]
 
 const closeRankStats = () => {
@@ -1192,7 +1232,6 @@ const openRankStatsPopup = () => {
   showRankStats.value = true
   activeRankTab.value = 'stats' // Set default tab to stats
 }
-
 </script>
 
 <style scoped>
@@ -1375,14 +1414,15 @@ const openRankStatsPopup = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 16px;
   width: fit-content;
   margin: 0 auto;
 }
 
 .hexagon-row {
   display: flex;
-  gap: 5px;
+  gap: 16px;
+  align-items: center;
 }
 
 .circle {
@@ -1397,16 +1437,47 @@ const openRankStatsPopup = () => {
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin: 5px;
 }
 
-.circle:hover {
-  transform: translateY(-2px);
-}
-
-.circle.green {
+.circle.center-letter {
   background: #28a745;
   color: white;
+}
+
+.arrow-btn {
+  width: 60px;
+  height: 60px;
+  border: none;
+  background: #e6e6e6;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.arrow-btn:hover {
+  background: #d9d9d9;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .circle {
+    background: #333;
+    color: #fff;
+  }
+
+  .arrow-btn {
+    background: #333;
+    color: #999;
+  }
+
+  .arrow-btn:hover {
+    background: #444;
+    color: #fff;
+  }
 }
 
 .controls {
@@ -1938,7 +2009,7 @@ const openRankStatsPopup = () => {
     background: red;
     display: flex;
     flex-direction: column;
-    padding:8px;
+    padding: 8px;
     color: white;
     border-bottom: none;
   }
@@ -2016,7 +2087,7 @@ const openRankStatsPopup = () => {
   .mode-btn {
     padding: 6px 12px; /* Smaller padding on mobile */
   }
- 
+
   .hexagon {
     width: 60px; /* Smaller hexagons on mobile */
     height: 69px;
@@ -2090,18 +2161,10 @@ const openRankStatsPopup = () => {
     flex-direction: column;
   }
 
-  .w-[50%] {
-    width: 100% !important;
-  }
-
   /* Adjust progress dots for mobile */
   .progress-dots {
     gap: 8px;
   }
-
-
-
-
 }
 
 /* Add tablet-specific adjustments */
@@ -2140,8 +2203,6 @@ const openRankStatsPopup = () => {
     height: auto;
     min-height: 100vh;
   }
-
-  
 
   .controls {
     margin-bottom: 20px;
@@ -2189,9 +2250,9 @@ const openRankStatsPopup = () => {
 .hexagon-section {
   display: flex;
   flex-direction: column;
-  gap: 24px;
   margin-top: 0;
   padding-top: 0;
+  gap: 16px;
   align-items: center;
 }
 
@@ -2224,11 +2285,7 @@ const openRankStatsPopup = () => {
   gap: 8px;
 }
 
-
-
 .dot.active {
-  
- 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2486,7 +2543,7 @@ ul {
     background: #ffe999;
     color: #333;
   }
-  
+
   .share-btn:hover {
     opacity: 0.9;
   }
@@ -2532,7 +2589,7 @@ ul {
     background: #e6e6e6;
     color: #333;
   }
-  
+
   [title]:hover::after {
     border-bottom-color: #e6e6e6;
   }
@@ -2621,11 +2678,11 @@ ul {
   .word-display {
     background: #2a2a2a;
   }
-  
+
   .current-word {
     color: #fff;
   }
-  
+
   .current-word .green-letter {
     color: #28a745;
   }
@@ -2661,8 +2718,13 @@ ul {
 }
 
 @keyframes blink {
-  from, to { opacity: 1; }
-  50% { opacity: 0; }
+  from,
+  to {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 /* Dark mode support */
@@ -2670,7 +2732,7 @@ ul {
   .current-word {
     color: #fff;
   }
-  
+
   .current-word .green-letter {
     color: #28a745;
   }
@@ -2691,7 +2753,7 @@ ul {
   background: #f5f5f5;
   padding: 4px 12px;
   border-radius: 16px;
- 
+
   color: #333;
   font-weight: 500;
 }
@@ -2707,7 +2769,7 @@ ul {
     background: #333;
     color: #fff;
   }
-  
+
   .word-chip.pangram {
     background: #ffe999;
     color: #333;
@@ -3212,8 +3274,6 @@ ul {
   width: 90%;
 }
 
- 
-
 .rank-details .points {
   font-size: 14px;
   font-weight: 600;
@@ -3232,7 +3292,7 @@ ul {
   .rank-details .points {
     color: #fff;
   }
-  
+
   .rank-details .description {
     color: #999;
   }
@@ -3355,6 +3415,3 @@ ul {
   }
 }
 </style>
-
-
-

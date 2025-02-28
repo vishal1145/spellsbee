@@ -8,7 +8,7 @@
         </button>
       </div>
     </div>
-    
+
     <router-view></router-view>
   </div>
 </template>
@@ -34,20 +34,20 @@ const generateUniqueName = () => {
 }
 
 const checkAndSetUserName = async () => {
-  let username = Cookies.get('username')
-  
+  let username = Cookies.get('spellsBeeUsername')
+
   if (!username) {
     try {
       const credentials = generateUniqueName()
- 
+
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/users`, {
         username: credentials.username,
         email: credentials.email,
-        password: credentials.password
+        password: credentials.password,
       })
-      
+
       if (response.status == 201) {
-        Cookies.set('username', credentials.username, { expires: 365 }) ;
+        Cookies.set('spellsBeeUsername', credentials.username, { expires: 1 })
       } else {
         console.error('Failed to register user')
       }
@@ -55,7 +55,7 @@ const checkAndSetUserName = async () => {
       console.error('Error registering new user:', error)
     }
   }
-  
+
   return username
 }
 
@@ -75,9 +75,10 @@ onMounted(async () => {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
-
 
 /* Dark mode styles */
 .dark-mode {

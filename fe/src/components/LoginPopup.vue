@@ -8,26 +8,26 @@
       <form @submit.prevent="handleLogin">
         <div class="form-group">
           <label>Email</label>
-          <input 
-            type="email" 
-            v-model="email" 
+          <input
+            type="email"
+            v-model="email"
             required
             minlength="4"
             maxlength="50"
             @keyup="removeSpaces('email')"
-          >
+          />
         </div>
         <div class="form-group">
           <label>Password</label>
           <div class="password-input-wrapper">
-            <input 
-              :type="showPassword ? 'text' : 'password'" 
-              v-model="password" 
+            <input
+              :type="showPassword ? 'text' : 'password'"
+              v-model="password"
               required
               minlength="4"
               maxlength="25"
               @keyup="removeSpaces('password')"
-            >
+            />
             <button type="button" class="toggle-password" @click="togglePassword">
               <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
             </button>
@@ -51,7 +51,7 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 
 const props = defineProps({
-  isVisible: Boolean
+  isVisible: Boolean,
 })
 
 const emit = defineEmits(['close', 'showSignup', 'showForgotPassword', 'loginSuccess'])
@@ -66,51 +66,51 @@ const close = () => {
 }
 
 const handleLogin = async () => {
-  try { 
-    errorMessage.value = ''; // Clear any previous error
+  try {
+    errorMessage.value = '' // Clear any previous error
 
     // Add validation check
     if (email.value.length < 4 || email.value.length > 50) {
-      errorMessage.value = 'Email must be between 4 and 50 characters.';
-      return;
+      errorMessage.value = 'Email must be between 4 and 50 characters.'
+      return
     }
 
     if (password.value.length < 4 || password.value.length > 25) {
-      errorMessage.value = 'Password must be between 4 and 25 characters.';
-      return;
+      errorMessage.value = 'Password must be between 4 and 25 characters.'
+      return
     }
 
     const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/users/login`, {
       email: email.value,
-      password: password.value
-    });
-    
-    const data = response.data;
-    if (response.status === 200) {  
-      Cookies.set('username', data.username, { expires: 365 });
-      localStorage.setItem('userLoginData', JSON.stringify(data));
-      emit('loginSuccess', data);
-      close();
-      window.location.reload();
+      password: password.value,
+    })
+
+    const data = response.data
+    if (response.status === 200) {
+      Cookies.set('spellsBeeUsername', data.username, { expires: 365 })
+      localStorage.setItem('userLoginData', JSON.stringify(data))
+      emit('loginSuccess', data)
+      close()
+      window.location.reload()
     } else {
       if (data.isEmailVerified === false) {
-        errorMessage.value = 'Please verify your email account before login.';
+        errorMessage.value = 'Please verify your email account before login.'
       } else {
-        errorMessage.value = data.message || 'Login failed. Please try again.';
+        errorMessage.value = data.message || 'Login failed. Please try again.'
       }
     }
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('Login error:', error)
     if (error.response) {
       // Handle specific API error responses
-      const data = error.response.data;
+      const data = error.response.data
       if (data.isEmailVerified === false) {
-        errorMessage.value = 'Please verify your email account before login.';
+        errorMessage.value = 'Please verify your email account before login.'
       } else {
-        errorMessage.value = data.message || 'Login failed. Please try again.';
+        errorMessage.value = data.message || 'Login failed. Please try again.'
       }
     } else {
-      errorMessage.value = 'An error occurred. Please try again later.';
+      errorMessage.value = 'An error occurred. Please try again later.'
     }
   }
 }
@@ -181,7 +181,7 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #4caf50;
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
@@ -196,7 +196,7 @@ input:focus {
 }
 
 .links a {
-  color: #4CAF50;
+  color: #4caf50;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -204,12 +204,12 @@ input:focus {
 }
 
 .links a:hover {
-  color: #388E3C;
+  color: #388e3c;
 }
 
 .login-button {
   width: 100%;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 8px;
@@ -220,7 +220,7 @@ input:focus {
 }
 
 .login-button:hover {
-  background-color: #388E3C;
+  background-color: #388e3c;
   transform: translateY(-1px);
 }
 
@@ -245,7 +245,7 @@ input:focus {
 }
 
 .toggle-password:hover {
-  color: #4CAF50;
+  color: #4caf50;
 }
 
 .error-message {
@@ -257,4 +257,4 @@ input:focus {
   margin-bottom: 1rem;
   text-align: center;
 }
-</style> 
+</style>

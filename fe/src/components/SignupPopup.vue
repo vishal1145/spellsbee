@@ -6,37 +6,40 @@
         <form @submit.prevent="handleSignup">
           <div class="form-group">
             <label>Username</label>
-            <input 
-              type="text" 
-              v-model="username" 
+            <input
+              type="text"
+              v-model="username"
               required
               minlength="4"
               maxlength="50"
               @input="validateUsername"
-              @keyup="removeSpaces('username')">
+              @keyup="removeSpaces('username')"
+            />
             <span v-if="usernameError" class="error-message">{{ usernameError }}</span>
           </div>
           <div class="form-group">
             <label>Email</label>
-            <input 
-              type="email" 
-              v-model="email" 
-              required 
+            <input
+              type="email"
+              v-model="email"
+              required
               maxlength="50"
-              @keyup="removeSpaces('email')">
+              @keyup="removeSpaces('email')"
+            />
             <span v-if="emailError" class="error-message">{{ emailError }}</span>
           </div>
           <div class="form-group">
             <label>Password</label>
             <div class="password-input-container">
-              <input 
-                :type="showPassword ? 'text' : 'password'" 
-                v-model="password" 
+              <input
+                :type="showPassword ? 'text' : 'password'"
+                v-model="password"
                 required
                 minlength="4"
                 maxlength="25"
                 @input="validatePassword"
-                @keyup="removeSpaces('password')">
+                @keyup="removeSpaces('password')"
+              />
               <button type="button" class="toggle-password" @click="togglePassword">
                 <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
               </button>
@@ -66,7 +69,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 
 const props = defineProps({
-  isVisible: Boolean
+  isVisible: Boolean,
 })
 
 const emit = defineEmits(['close', 'showLogin'])
@@ -118,32 +121,32 @@ const handleSignup = async () => {
   // Validate before submitting
   validateUsername()
   validatePassword()
-  
+
   if (usernameError.value || passwordError.value) {
     return
   }
-  
+
   try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/register`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: Cookies.get('username'),
+        username: Cookies.get('spellsBeeUsername'),
         newusername: username.value,
         email: email.value,
-        password: password.value
-      })
+        password: password.value,
+      }),
     })
-    
+
     const data = await response.json()
-    
+
     if (!response.ok) {
       // Reset both error messages first
       emailError.value = ''
       usernameError.value = ''
-      
+
       // Set specific error based on the message
       if (data.message === 'Email already exists') {
         emailError.value = 'This email is already registered. Please use a different email.'
@@ -154,13 +157,12 @@ const handleSignup = async () => {
       return
     }
 
-    Cookies.set('username', username.value, { expires: 365 });
+    Cookies.set('spellsBeeUsername', username.value, { expires: 365 })
 
     username.value = ''
     email.value = ''
     password.value = ''
     signupSuccess.value = true
-
   } catch (error) {
     console.error('Signup failed:', error.response?.data || error.message)
   }
@@ -224,7 +226,7 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #4caf50;
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
@@ -239,7 +241,7 @@ input:focus {
 }
 
 .links a {
-  color: #4CAF50;
+  color: #4caf50;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -247,12 +249,12 @@ input:focus {
 }
 
 .links a:hover {
-  color: #388E3C;
+  color: #388e3c;
 }
 
 .signup-button {
   width: 100%;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 8px;
@@ -263,7 +265,7 @@ input:focus {
 }
 
 .signup-button:hover {
-  background-color: #388E3C;
+  background-color: #388e3c;
   transform: translateY(-1px);
 }
 
@@ -277,7 +279,7 @@ input:focus {
 }
 
 .success-icon {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   width: 60px;
   height: 60px;
@@ -290,7 +292,7 @@ input:focus {
 }
 
 .success-message h2 {
-  color: #4CAF50;
+  color: #4caf50;
   margin-bottom: 1rem;
 }
 
@@ -317,7 +319,7 @@ input:focus {
 }
 
 .toggle-password:hover {
-  color: #4CAF50;
+  color: #4caf50;
 }
 
 .error-message {
@@ -326,4 +328,4 @@ input:focus {
   margin-top: 4px;
   display: block;
 }
-</style> 
+</style>
