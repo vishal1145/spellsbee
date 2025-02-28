@@ -33,13 +33,9 @@ const generateUniqueName = () => {
   return { username: `user_${timestamp}`, email, password }
 }
 
-const checkAndSetUserName = async () => {
-  let username = Cookies.get('spellsBeeUsername')
-
-  if (!username) {
-    try {
+const setUserName = async () => {
+ try {
       const credentials = generateUniqueName()
-
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/users`, {
         username: credentials.username,
         email: credentials.email,
@@ -54,6 +50,26 @@ const checkAndSetUserName = async () => {
     } catch (error) {
       console.error('Error registering new user:', error)
     }
+}
+
+
+const checkUserInDb = async (username)=>{
+   try {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/check-user/${username}`)
+   } catch (error) {
+    if(error.response?.data?.message == "User not found" ){
+      setUserName();
+    }
+   }
+}
+
+const checkAndSetUserName =  () => {
+  let username = Cookies.get('spellsBeeUsername')
+
+  if (!username) {
+      setUserName();
+  }else{
+     checkUserInDb(username);
   }
 
   return username

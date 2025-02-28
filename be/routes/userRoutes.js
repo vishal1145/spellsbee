@@ -8,7 +8,8 @@ const {
   registerUser,
   verifyEmail,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  checkUser
 } = require('../controllers/userController');
 
 router.route('/').get(getUsers).post(createUser);
@@ -18,5 +19,6 @@ router.route('/verify-email').put(verifyEmail);
 router.route('/:id').get(getUserById);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
+router.route('/check-user/:username').get(checkUser);
 
 module.exports = router; 
