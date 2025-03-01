@@ -1069,7 +1069,7 @@ const closePopup = () => {
 // Add these new functions
 const loadUserProfile = () => {
   try {
-    const userData = localStorage.getItem('userLoginData');
+    const userData = localStorage.getItem('userLoginData')
 
     if (userData) {
       userProfile.value = JSON.parse(userData)
@@ -1092,6 +1092,7 @@ const logout = () => {
   localStorage.removeItem('userLoginData')
   userProfile.value = null
   showProfileMenu.value = false
+  window.location.reload()
 }
 
 const handleClickOutside = (event) => {
@@ -1129,6 +1130,7 @@ const selectedRank = ref({
   description: '',
 })
 
+// Add this new object for rank details
 const rankDetails = {
   B: {
     title: 'Beginner',
@@ -1172,8 +1174,10 @@ const rankDetails = {
   },
 }
 
+// Add these new functions
 const showRankPopup = (letter) => {
   if (letter === 'B') {
+    // Show stats popup only for Beginner rank
     showRankStats.value = true
   } else {
     selectedRank.value = rankDetails[letter]
@@ -1188,6 +1192,7 @@ const closeRankPopup = () => {
 const showRankStats = ref(false)
 const activeRankTab = ref('stats')
 
+// Sample words array - replace with your actual words
 const rankWords = [
   'Dewy',
   'Doddery',
@@ -1222,6 +1227,7 @@ const closeRankStats = () => {
   showRankStats.value = false
 }
 
+// Add this new function
 const openRankStatsPopup = () => {
   showRankStats.value = true
   activeRankTab.value = 'stats' // Set default tab to stats
@@ -1229,6 +1235,7 @@ const openRankStatsPopup = () => {
 </script>
 
 <style scoped>
+/* Updated styles for a more modern look */
 .game-container {
   max-width: 800px;
   margin: 0 auto;
@@ -1314,6 +1321,8 @@ const openRankStatsPopup = () => {
   justify-content: center;
   transition: all 0.2s ease;
 }
+
+/* Add specific styles for help button */
 
 .nav-icon-btn:last-child:hover {
   opacity: 0.9;
@@ -1453,6 +1462,7 @@ const openRankStatsPopup = () => {
   background: #d9d9d9;
 }
 
+/* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .circle {
     background: #333;
@@ -1527,8 +1537,8 @@ const openRankStatsPopup = () => {
 }
 
 .delete-btn .delete-icon {
-  color: #dc3545;
-  font-size: 16px;  
+  color: #dc3545; /* Red color */
+  font-size: 16px; /* Adjust size to match other icons */
 }
 
 .delete-btn:hover {

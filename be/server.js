@@ -17,7 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Store both the current daily letters and center letter
 let currentDailyLetters = generateDailyString();
-let currentCenterLetter = currentDailyLetters[1];
 
 function generateDailyString() {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -31,15 +30,10 @@ function generateDailyString() {
   return Array.from(usedLetters); // Now returns an array instead of joined string
 }
 
-// Update letters at midnight
 cron.schedule('0 0 * * *', () => {
   currentDailyLetters = generateDailyString();
-  currentCenterLetter = currentDailyLetters[Math.floor(Math.random() * 7)];
-  console.log('New daily letters generated:', currentDailyLetters);
-  console.log('New center letter:', currentCenterLetter);
 });
 
-// Add new endpoint to get daily letters
 app.get('/api/daily-letters', (req, res) => {
   res.json({ 
     letters: currentDailyLetters 
@@ -48,12 +42,10 @@ app.get('/api/daily-letters', (req, res) => {
 
 connectDB();
 
-// Routes
 app.use('/api/users', userRoutes);
 app.use('/api/spellsbee', spellsbeeRoutes);
 app.use('/api/stats', userStatsRoutes);
 
-// Basic route
 app.get('/', (req, res) => {
   res.send('API is running...');
 });

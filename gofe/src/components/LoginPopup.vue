@@ -85,6 +85,7 @@ const handleLogin = async () => {
       password: password.value,
     })
 
+
     const data = response.data
     if (response.status === 200) {
       Cookies.set('spellsBeeUsername', data.username, { expires: 365 })
