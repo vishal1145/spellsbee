@@ -91,6 +91,7 @@ const handleLogin = async () => {
       localStorage.setItem('userLoginData', JSON.stringify(data))
       emit('loginSuccess', data)
       close()
+      window.location.reload()
     } else {
       if (data.isEmailVerified === false) {
         errorMessage.value = 'Please verify your email account before login.'

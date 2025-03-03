@@ -55,7 +55,7 @@ const setUserName = async () => {
 
 const checkUserInDb = async (username)=>{
    try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/check-user/${username}`)
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/checkuser?username=${username}`)
    } catch (error) {
     if(error.response?.data?.message == "User not found" ){
       setUserName();

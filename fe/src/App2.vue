@@ -899,8 +899,8 @@ const fetchUserData = async () => {
 const fetchDailyLetters = async () => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/daily-letters`)
-    letters.value = response.data.letters
-    centerLetter.value = response.data.letters[1]
+    letters.value = response.data
+    centerLetter.value = response.data[1]
     isLoading.value = false
   } catch (error) {
     console.error('Error fetching daily letters:', error)
@@ -948,7 +948,7 @@ const submitWord = async () => {
 
     if (validateResponse.data.isValid) {
       const saveResponse = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/stats/user/${username.value}`,
+        `${import.meta.env.VITE_API_URL}/api/stats/update-stats/${username.value}`,
         {
           word: currentWord.value,
           points: calculatePoints(currentWord.value),
@@ -1579,6 +1579,7 @@ const openRankStatsPopup = () => {
   color: #333;
   background: #ffe999;
 }
+
 
 .tab-content {
   padding: 16px;
